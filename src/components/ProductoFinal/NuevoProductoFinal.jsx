@@ -10,9 +10,9 @@ import { Radio, Row, Col, message } from 'antd';
 import { IoTrashOutline } from 'react-icons/io5';
 import Table from 'react-bootstrap/Table';
 
-const URI = 'http://186.158.152.141:3001/sisweb/api/producto_final/';
-const URIRECETA = 'http://186.158.152.141:3001/sisweb/api/receta/';
-const URIARTICULO = 'http://186.158.152.141:3001/sisweb/api/producto/';
+const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/producto_final/';
+const URIRECETA = 'https://api-rest-automotors.onrender.com/sisweb/api/receta/';
+const URIARTICULO = 'https://api-rest-automotors.onrender.com/sisweb/api/producto/';
 
 //let fechaActual = new Date();
 

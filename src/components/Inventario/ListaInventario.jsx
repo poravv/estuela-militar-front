@@ -13,7 +13,7 @@ import Highlighter from 'react-highlight-words';
 import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
-const URI = 'http://186.158.152.141:3001/sisweb/api/inventario';
+const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/inventario';
 let fechaActual = new Date();
 const ListaInventario = ({ token,idsucursal }) => {
 

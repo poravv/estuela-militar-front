@@ -15,8 +15,8 @@ import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 import { Buffer } from 'buffer'
 
 
-const URI = 'http://186.158.152.141:3001/sisweb/api/producto_final/';
-const URIARTICULO = 'http://186.158.152.141:3001/sisweb/api/producto/';
+const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/producto_final/';
+const URIARTICULO = 'https://api-rest-automotors.onrender.com/sisweb/api/producto/';
 let fechaActual = new Date();
 const ListaProductoFinal = ({ token }) => {
 

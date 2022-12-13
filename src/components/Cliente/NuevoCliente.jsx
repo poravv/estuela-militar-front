@@ -7,8 +7,8 @@ import React from 'react';
 import { Button, Form, Input, Radio,message } from 'antd';
 import Buscador from '../Buscador/Buscador';
 
-const URI = 'http://186.158.152.141:3001/sisweb/api/cliente/';
-const URIPROV = 'http://186.158.152.141:3001/sisweb/api/ciudad/';
+const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/cliente/';
+const URIPROV = 'https://api-rest-automotors.onrender.com/sisweb/api/ciudad/';
 let fechaActual = new Date();
 
 function NuevoCliente({ token, idusuario }) {

@@ -7,7 +7,7 @@ import UploadFile from '../Utils/Upload';
 import { Buffer } from 'buffer'
 
 const { Option } = Select;
-const URI = 'http://186.158.152.141:3001/sisweb/api/proveedor/';
+const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/proveedor/';
 
 function TableModelExpand({ token, form, data, mergedColumns, keyExtraido,columnDet,keyDet }) {
 
