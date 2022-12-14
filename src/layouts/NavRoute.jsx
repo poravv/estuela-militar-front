@@ -1,13 +1,11 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 //Importamos componentes creados
 import Inicio from '../components/Inicio';
-import NuevoArticulo from '../components/Articulos/NuevoArticulo';
-import ListaArticulos from '../components/Articulos/ListaArticulos';
+import NuevoProducto from '../components/Producto/NuevoProducto';
+import ListaProductos from '../components/Producto/ListaProductos';
 import ListaProveedor from '../components/Proveedor/ListaProveedor';
 import ListaInventario from '../components/Inventario/ListaInventario';
 import NuevoInventario from '../components/Inventario/NuevoInventario';
-import ListaProductoFinal from '../components/ProductoFinal/ListaProductoFinal';
-import NuevoProductoFinal from '../components/ProductoFinal/NuevoProductoFinal';
 import ListaVenta from '../components/Venta/ListaVenta';
 import NuevaVenta from '../components/Venta/NuevaVenta';
 import AppBar from './AppBar';
@@ -31,11 +29,8 @@ function NavRoute({ usuario }) {
                   <Route path='/proveedor' element={<ListaProveedor token={usuario.token} />} />
                   <Route path='/crearprov' element={<NuevoProveedor idusuario={usuario.body.idusuario} token={usuario.token} />} />
                   #Producto
-                  <Route path='/articulo' element={<ListaArticulos token={usuario.token} />} />
-                  <Route path='/creararticulo' element={<NuevoArticulo idusuario={usuario.body.idusuario} token={usuario.token} />} />
-                  #Producto final
-                  <Route path='/producto' element={<ListaProductoFinal token={usuario.token} />} />
-                  <Route path='/crearproducto' element={<NuevoProductoFinal token={usuario.token} />} />
+                  <Route path='/articulo' element={<ListaProductos token={usuario.token} />} />
+                  <Route path='/creararticulo' element={<NuevoProducto idusuario={usuario.body.idusuario} token={usuario.token} />} />
 
                   <Route path='*' element={<Navigate replace to='/' />} />
                   

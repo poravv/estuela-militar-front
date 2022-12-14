@@ -9,15 +9,15 @@ import { Row, Col, message } from 'antd';
 import { IoTrashOutline } from 'react-icons/io5';
 import Table from 'react-bootstrap/Table';
 
-const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/venta';
-const URIINVDET = 'https://api-rest-automotors.onrender.com/sisweb/api/detventa';
-const URIPRODUCTO = 'https://api-rest-automotors.onrender.com/sisweb/api/producto_final';
-const URICLI = 'https://api-rest-automotors.onrender.com/sisweb/api/cliente';
+const URI = 'http://186.158.152.141:3002/automot/api/venta';
+const URIINVDET = 'http://186.158.152.141:3002/automot/api/detventa';
+const URIPRODUCTO = 'http://186.158.152.141:3002/automot/api/producto';
+const URICLI = 'http://186.158.152.141:3002/automot/api/cliente';
 
 let fechaActual = new Date();
 
 function NuevaVenta({ token, idusuario, idsucursal }) {
-
+ 
     //Parte de nuevo registro por modal
     const strFecha = fechaActual.getFullYear() + "-" + (fechaActual.getMonth() + 1) + "-" + fechaActual.getDate();
     const [tblventatmp, setTblVentaTmp] = useState([]);
@@ -67,9 +67,9 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
     const guardaDetalle = async (valores) => {
         await axios.post(URIINVDET + "/post/", valores, config);
     }
-    const operacionVenta = async (idproducto_final) => {
-        //console.log(idproducto_final,'-',idusuario,'-',0);
-        return await axios.post(URI + `/operacionventa/${idproducto_final}-procesado-${idusuario}-0`, {}, config);
+    const operacionVenta = async (idproducto) => {
+        //console.log(idproducto,'-',idusuario,'-',0);
+        return await axios.post(URI + `/operacionventa/${idproducto}-procesado-${idusuario}-0`, {}, config);
     }
 
 
@@ -96,13 +96,13 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
                     tblventatmp.map((venta) => {
                         guardaDetalle({
                             cantidad: venta.cantidad,
-                            idproducto_final: venta.producto_final.idproducto_final,
-                            estado: venta.producto_final.estado,
+                            idproducto: venta.producto.idproducto,
+                            estado: venta.producto.estado,
                             descuento: venta.descuento,
                             idventa: cabecera.data.body.idventa,
-                            subtotal: venta.producto_final.costo * venta.cantidad,
+                            subtotal: venta.producto.costo * venta.cantidad,
                         });
-                        operacionVenta(venta.producto_final.idproducto_final);
+                        operacionVenta(venta.producto.idproducto);
                         return null;
                     });
                     
@@ -130,8 +130,8 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
         //console.log(productoSelect);
 
         //Validacion de existencia del producto dentro de la lista 
-        //const productoSelect = lstProducto.filter((inv) => inv.idproducto_final === idproductoSelect);
-        const validExist = tblventatmp.filter((inv) => inv.idproducto_final === productoSelect.idproducto_final);
+        //const productoSelect = lstProducto.filter((inv) => inv.idproducto === idproductoSelect);
+        const validExist = tblventatmp.filter((inv) => inv.idproducto === productoSelect.idproducto);
 
         if (productoSelect !== null) {
             if (cantidad !== 0 && cantidad !== null && cantidad !== '') {
@@ -150,7 +150,7 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
                     if (parseInt(cantidad) <= parseInt(productoSelect.cant_prod_posible)) {
 
                         try {
-                            await axios.post(URI + `/operacionventa/${productoSelect.idproducto_final}-venta-${idusuario}-${cantidad}`, {}, config);
+                            await axios.post(URI + `/operacionventa/${productoSelect.idproducto}-venta-${idusuario}-${cantidad}`, {}, config);
                         } catch (error) {
                             console.log('Error: ', error);
                         }
@@ -159,8 +159,8 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
 
 
                         tblventatmp.push({
-                            idproducto_final: productoSelect.idproducto_final,
-                            producto_final: productoSelect,
+                            idproducto: productoSelect.idproducto,
+                            producto: productoSelect,
                             cantidad: cantidad,
                             descuento: descuento
                         });
@@ -196,7 +196,7 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
         //console.log(lstProducto);
         lstProducto.find((element) => {
             
-            if (element.idproducto_final === value) {
+            if (element.idproducto === value) {
                 //console.log(element);
                 setProductoSelect(element)
                 return true;
@@ -226,7 +226,7 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
     const extraerRegistro = async (e,id, costo, monto_iva) => {
         e.preventDefault();
         //console.log('Datos: ',costo,monto_iva)
-        const updtblVenta = tblventatmp.filter(inv => inv.idproducto_final !== id);
+        const updtblVenta = tblventatmp.filter(inv => inv.idproducto !== id);
         setTblVentaTmp(updtblVenta);
 
         try {
@@ -260,7 +260,7 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
 
                     <Row style={{ justifyContent: `center`, margin: `10px` }}>
                         <Col style={{ marginLeft: `15px` }}>
-                            <Buscador label={'nombre'} title={'Producto'} value={'idproducto_final'} data={lstProducto} onChange={onChangeProducto} onSearch={onSearch} />
+                            <Buscador label={'nombre'} title={'Producto'} value={'idproducto'} data={lstProducto} onChange={onChangeProducto} onSearch={onSearch} />
                         </Col>
                         <Col style={{ marginLeft: `15px` }}>
                             <Form.Item name="cantidad" rules={[{ required: true, message: 'Cargue cantidad', },]}>
@@ -295,17 +295,17 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
                             </thead>
                             <tbody>
                                 {tblventatmp.length !== 0 ? tblventatmp.map((inv) => (
-                                    <tr key={inv.idproducto_final}>
-                                        <td> {inv.producto_final.nombre} </td>
-                                        <td> {inv.producto_final.costo} </td>
+                                    <tr key={inv.idproducto}>
+                                        <td> {inv.producto.nombre} </td>
+                                        <td> {inv.producto.costo} </td>
                                         <td> {inv.cantidad} </td>
                                         <td> {inv.descuento} </td>
-                                        <td> {inv.producto_final.tipo_iva + '%'} </td>
-                                        <td> {inv.producto_final.costo*inv.producto_final.tipo_iva/100} </td>
-                                        <td> {(inv.producto_final.costo*inv.producto_final.tipo_iva/100) * inv.cantidad} </td>
-                                        <td> {inv.producto_final.costo * inv.cantidad} </td>
+                                        <td> {inv.producto.tipo_iva + '%'} </td>
+                                        <td> {inv.producto.costo*inv.producto.tipo_iva/100} </td>
+                                        <td> {(inv.producto.costo*inv.producto.tipo_iva/100) * inv.cantidad} </td>
+                                        <td> {inv.producto.costo * inv.cantidad} </td>
                                         <td>
-                                            <button onClick={(e) => extraerRegistro(e,inv.idproducto_final, (inv.producto_final.costo - descuento), parseInt((inv.producto_final.costo*inv.producto_final.tipo_iva)/100))} className='btn btn-danger'><IoTrashOutline /></button>
+                                            <button onClick={(e) => extraerRegistro(e,inv.idproducto, (inv.producto.costo - descuento), parseInt((inv.producto.costo*inv.producto.tipo_iva)/100))} className='btn btn-danger'><IoTrashOutline /></button>
                                         </td>
                                     </tr>
                                 )) : null

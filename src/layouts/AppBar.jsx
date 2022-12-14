@@ -43,15 +43,14 @@ const AppBar = ({ usuario }) => {
         //getItem(() => navegacion('/tablemodel'), 'Option 2', '2', <DesktopOutlined />),
         getItem(null, 'Mantenimiento', 'sub1', <ToolOutlined />, [
             getItem(() => navegacion('/proveedor'), 'Proveedor', '3'),
-            getItem(() => navegacion('/articulo'), 'Partes', '4'),
-            getItem(() => navegacion('/producto'), 'Vehiculos', '5'),
+            getItem(() => navegacion('/articulo'), 'Vehiculos', '4'),
         ]),
         getItem(null, 'Movimiento', 'sub2', <TeamOutlined />, [
-            getItem(() => navegacion('/cliente'), 'Clientes', '6'),
-            getItem(() => navegacion('/inventario'), 'Playa', '8'),
-            getItem(() => navegacion('/venta'), 'Pedido venta', '9')
+            getItem(() => navegacion('/cliente'), 'Clientes', '5'),
+            getItem(() => navegacion('/inventario'), 'Playa', '6'),
+            getItem(() => navegacion('/venta'), 'Pedido venta', '7')
         ]),
-        getItem(() => Logout(), 'Close session', '10', <LogoutOutlined />)
+        getItem(() => Logout(), 'Close session', '8', <LogoutOutlined />)
     ];
 
 

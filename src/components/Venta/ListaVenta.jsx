@@ -13,7 +13,7 @@ import Highlighter from 'react-highlight-words';
 import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
-const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/venta';
+const URI = 'http://186.158.152.141:3002/automot/api/venta';
 let fechaActual = new Date();
 const ListaVenta = ({ token,idusuario }) => {
 
@@ -287,17 +287,17 @@ const ListaVenta = ({ token,idusuario }) => {
     const columnDet = [
         {
             title: 'iddetalle',
-            dataIndex: 'idproducto_final',
-            key: 'idproducto_final',
+            dataIndex: 'idproducto',
+            key: 'idproducto',
             width: '2%',
         },
         {
             title: 'Producto',
-            dataIndex: 'producto_final',
-            key: 'idproducto_final',
+            dataIndex: 'producto',
+            key: 'idproducto',
             width: '2%',
-            render: (producto_final)=> {
-                return producto_final.nombre
+            render: (producto)=> {
+                return producto.nombre
             }
         },
         {
@@ -307,10 +307,10 @@ const ListaVenta = ({ token,idusuario }) => {
         },
         {
             title: 'Costo',
-            dataIndex: 'producto_final',
+            dataIndex: 'producto',
             width: '2%',
-            render: (producto_final)=> {
-                return producto_final.costo
+            render: (producto)=> {
+                return producto.costo
             }
         },
         {
@@ -429,7 +429,7 @@ const ListaVenta = ({ token,idusuario }) => {
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>
                 <Button type="primary" onClick={() => navigate('/crearventa')} >{<PlusOutlined />} Nuevo</Button>
             </div>
-            <TableModelExpand columnDet={columnDet} keyDet={'idproducto_final'} token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idventa'} />
+            <TableModelExpand columnDet={columnDet} keyDet={'idproducto'} token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idventa'} />
         </>
     )
 }

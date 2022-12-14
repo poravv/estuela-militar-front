@@ -13,7 +13,7 @@ import Highlighter from 'react-highlight-words';
 import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
-const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/inventario';
+const URI = 'http://186.158.152.141:3002/automot/api/inventario';
 let fechaActual = new Date();
 const ListaInventario = ({ token,idsucursal }) => {
 
@@ -53,7 +53,7 @@ const ListaInventario = ({ token,idsucursal }) => {
    */
 
     const getInventario = async () => {
-        const res = await axios.get(URI + `/getinvsuc/${idsucursal}`, config)
+        const res = await axios.get(URI + `/get/${idsucursal}`, config)
         setData(res.data.body);
         /*En caso de que de error en el server direcciona a login*/
         if(res.data.error){
@@ -167,8 +167,8 @@ const ListaInventario = ({ token,idsucursal }) => {
 
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Playa');
-        XLSX.writeFile(wb, 'Playa.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'Inventario');
+        XLSX.writeFile(wb, 'Inventario.xlsx')
     }
 
     const updateInventario = async (newData) => {
@@ -387,7 +387,7 @@ const ListaInventario = ({ token,idsucursal }) => {
 
     return (
         <>
-            <h3>Playa</h3>
+            <h3>Inventario</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
             <Button type='primary' style={{ backgroundColor: `#E94325`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>

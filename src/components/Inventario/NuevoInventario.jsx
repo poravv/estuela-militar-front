@@ -9,9 +9,9 @@ import { Row, Col, message } from 'antd';
 import { IoTrashOutline } from 'react-icons/io5';
 import Table from 'react-bootstrap/Table';
 
-const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/inventario/';
-const URIINVDET = 'https://api-rest-automotors.onrender.com/sisweb/api/detinventario/';
-const URIPROD = 'https://api-rest-automotors.onrender.com/sisweb/api/producto/';
+const URI = 'http://186.158.152.141:3002/automot/api/inventario/';
+const URIINVDET = 'http://186.158.152.141:3002/automot/api/detinventario/';
+const URIPROD = 'http://186.158.152.141:3002/automot/api/producto/';
 
 //let fechaActual = new Date();
 

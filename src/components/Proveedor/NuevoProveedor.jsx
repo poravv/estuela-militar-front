@@ -7,7 +7,7 @@ import React from 'react';
 import { Button, Form, Input } from 'antd';
 
 
-const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/proveedor/';
+const URI = 'http://186.158.152.141:3002/automot/api/proveedor/';
 let fechaActual = new Date();
 
 function NuevoProveedor({ token, idusuario }) {

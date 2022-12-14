@@ -7,11 +7,11 @@ import React from 'react';
 import { Button, Form, Input,message } from 'antd';
 import Buscador from '../Buscador/Buscador';
 
-const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/producto/';
-const URIPROV = 'https://api-rest-automotors.onrender.com/sisweb/api/proveedor/';
+const URI = 'http://186.158.152.141:3002/automot/api/producto/';
+const URIPROV = 'http://186.158.152.141:3002/automot/api/proveedor/';
 let fechaActual = new Date();
 
-function NuevoArticulo({ token, idusuario }) {
+function NuevoProducto({ token, idusuario }) {
 
     //Parte de nuevo registro por modal
     const strFecha = fechaActual.getFullYear() + "-" + (fechaActual.getMonth() + 1) + "-" + fechaActual.getDate();
@@ -48,26 +48,25 @@ function NuevoArticulo({ token, idusuario }) {
     //procedimiento para actualizar
     const create = async (e) => {
     
-        await axios.post(URI + "post", {
-            descripcion: descripcion,
-            precio: precio,
-            peso: 0,
-            idproveedor: idproveedor,
-            idusuario_upd: idusuario,
-            fecha_insert: strFecha,
-            fecha_upd: strFecha,
-            estado: "AC",
-            //img: previewImage
-        }, config
-        ).then((rs) => {
-            if (rs.data.error) {
-                message.error('Error en la creacion de parte');
-                return null;
-            }
+        try {
+            await axios.post(URI + "post", {
+                descripcion: descripcion,
+                precio: precio,
+                peso: 0,
+                idproveedor: idproveedor,
+                idusuario_upd: idusuario,
+                fecha_insert: strFecha,
+                fecha_upd: strFecha,
+                estado: "AC",
+                //img: previewImage
+            }, config
+            );
             navigate('/articulo');
-        });
-        navigate('/articulo');
-        message.success('Registro almacenado');
+            message.success('Registro almacenado');
+        } catch (error) {
+            message.error('Error en la creacion de parte');
+        }
+       
     }
 
     const btnCancelar = (e) => {
@@ -122,7 +121,7 @@ function NuevoArticulo({ token, idusuario }) {
     );
 }
 
-export default NuevoArticulo;
+export default NuevoProducto;
 
 /*
 

@@ -7,8 +7,8 @@ import UploadFile from '../Utils/Upload';
 import { Buffer } from 'buffer'
 
 const { Option } = Select;
-const URIPROV = 'https://api-rest-automotors.onrender.com/sisweb/api/proveedor/';
-const URICIUDAD = 'https://api-rest-automotors.onrender.com/sisweb/api/ciudad/';
+const URIPROV = 'http://186.158.152.141:3002/automot/api/proveedor/';
+const URICIUDAD = 'http://186.158.152.141:3002/automot/api/ciudad/';
 
 function TableModel({ token, form, data, mergedColumns, keyExtraido }) {
 

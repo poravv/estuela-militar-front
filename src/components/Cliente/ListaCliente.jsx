@@ -13,7 +13,7 @@ import Highlighter from 'react-highlight-words';
 import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
-const URI = 'https://api-rest-automotors.onrender.com/sisweb/api/cliente/';
+const URI = 'http://186.158.152.141:3002/automot/api/cliente/';
 let fechaActual = new Date();
 const ListaClientes = ({ token }) => {
 
