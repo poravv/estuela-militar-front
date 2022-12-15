@@ -218,7 +218,7 @@ const ListaClientes = ({ token }) => {
         {
             title: 'Tipo',
             dataIndex: 'tipo_cli',
-            //  width: '15%',
+              width: '9%',
             editable: true,
             render: (_, { tipo_cli }) => {
                 if(tipo_cli){
@@ -235,7 +235,7 @@ const ListaClientes = ({ token }) => {
         {
             title: 'Sexo',
             dataIndex: 'sexo',
-            //  width: '15%',
+              width: '9%',
             editable: true,
             render: (_, { sexo }) => {
                 if(sexo){
@@ -252,7 +252,7 @@ const ListaClientes = ({ token }) => {
         {
             title: 'Estado',
             dataIndex: 'estado',
-            //width: '10%',
+            width: '7%',
             editable: true,
             render: (_, { estado, idcliente }) => {
                 let color = 'black';

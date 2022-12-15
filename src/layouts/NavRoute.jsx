@@ -1,11 +1,10 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 //Importamos componentes creados
 import Inicio from '../components/Inicio';
-import NuevoProducto from '../components/Producto/NuevoProducto';
-import ListaProductos from '../components/Producto/ListaProductos';
+import NuevoModelo from '../components/Modelo/NuevoModelo';
+import ListaModelo from '../components/Modelo/ListaModelo';
+import ListaModeloTotal from '../components/Modelo/ListaModeloTotal';
 import ListaProveedor from '../components/Proveedor/ListaProveedor';
-import ListaInventario from '../components/Inventario/ListaInventario';
-import NuevoInventario from '../components/Inventario/NuevoInventario';
 import ListaVenta from '../components/Venta/ListaVenta';
 import NuevaVenta from '../components/Venta/NuevaVenta';
 import AppBar from './AppBar';
@@ -13,6 +12,10 @@ import TableFormat from '../components/TableModel/Table';
 import NuevoProveedor from '../components/Proveedor/NuevoProveedor';
 import ListaCliente from '../components/Cliente/ListaCliente';
 import NuevoCliente from '../components/Cliente/NuevoCliente';
+import ListaCiudad from '../components/Ciudad/ListaCiudad';
+import NuevoCiudad from '../components/Ciudad/NuevoCiudad';
+import ListaMarca from '../components/Marca/ListaMarca';
+import NuevoMarca from '../components/Marca/NuevoMarca';
 
 function NavRoute({ usuario }) {
   return (
@@ -29,8 +32,17 @@ function NavRoute({ usuario }) {
                   <Route path='/proveedor' element={<ListaProveedor token={usuario.token} />} />
                   <Route path='/crearprov' element={<NuevoProveedor idusuario={usuario.body.idusuario} token={usuario.token} />} />
                   #Producto
-                  <Route path='/articulo' element={<ListaProductos token={usuario.token} />} />
-                  <Route path='/creararticulo' element={<NuevoProducto idusuario={usuario.body.idusuario} token={usuario.token} />} />
+                  <Route path='/modelo' element={<ListaModelo idsucursal={usuario.body.idsucursal} token={usuario.token} />} />
+                  <Route path='/modelototal' element={<ListaModeloTotal idsucursal={usuario.body.idsucursal} token={usuario.token} />} />
+                  <Route path='/crearmodelo' element={<NuevoModelo idsucursal={usuario.body.idsucursal} idusuario={usuario.body.idusuario} token={usuario.token} />} />
+
+                  #Ciudad
+                  <Route path='/ciudad' element={<ListaCiudad token={usuario.token} />} />
+                  <Route path='/crearciudad' element={<NuevoCiudad token={usuario.token} />} />
+                  #Marca
+                  <Route path='/marca' element={<ListaMarca token={usuario.token} />} />
+                  <Route path='/crearmarca' element={<NuevoMarca token={usuario.token} />} />
+
 
                   <Route path='*' element={<Navigate replace to='/' />} />
                   
@@ -42,10 +54,6 @@ function NavRoute({ usuario }) {
             #Cliente
             <Route path='/cliente' element={<ListaCliente token={usuario.token} />} />
             <Route path='/crearcliente' element={<NuevoCliente token={usuario.token} />} />
-
-            #Inventario
-            <Route path='/inventario' element={<ListaInventario token={usuario.token} idsucursal={usuario.body.idsucursal} />} />
-            <Route path='/crearinv' element={<NuevoInventario token={usuario.token} idsucursal={usuario.body.idsucursal} />} />
             
             <Route path='*' element={<Navigate replace to='/' />} />
             #Venta
@@ -56,7 +64,7 @@ function NavRoute({ usuario }) {
           </Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </> 
   )
 }
 

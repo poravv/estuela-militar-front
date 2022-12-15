@@ -4,18 +4,20 @@ import { useState, useEffect, useRef } from 'react'
 import * as XLSX from 'xlsx/xlsx.mjs';
 import { Popconfirm, Typography } from 'antd';
 import { Form } from 'antd';
-import TableModelExpand from '../TableModel/TableModelExpand';
+import TableModel from '../TableModel/TableModel';
 import { Tag } from 'antd';
 import { message } from 'antd';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Input, Space } from 'antd';
+import { Button, Input, Space, Image } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
-const URI = 'http://186.158.152.141:3002/automot/api/venta';
+import { Buffer } from 'buffer'
+
+const URI = 'http://186.158.152.141:3002/automot/api/modelo';
 let fechaActual = new Date();
-const ListaVenta = ({ token,idusuario }) => {
+const ListaModelo = ({ token,idsucursal }) => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState([]);
@@ -28,8 +30,10 @@ const ListaVenta = ({ token,idusuario }) => {
     const searchInput = useRef(null);
     const navigate = useNavigate();
     //---------------------------------------------------
+
+
     useEffect(() => {
-        getVentas();
+        getModelo();
         // eslint-disable-next-line
     }, []);
 
@@ -40,15 +44,23 @@ const ListaVenta = ({ token,idusuario }) => {
         }
     };
 
-
-    const getVentas = async () => {
-        const res = await axios.get(`${URI}/getvenusu/${idusuario}`, config)
+    const getModelo = async () => {
+        const res = await axios.get(`${URI}/getsucursal/${idsucursal}`, config)
         /*En caso de que de error en el server direcciona a login*/
-        console.log(res.data);
-
         //if (res.data.error) {Logout();}
-        
+        /*
+         const resDataId = [];
+ 
+         res.data.body.map((rs) => {
+             resDataId.push(rs);
+             return true;
+         })
+        */
+        //console.log(resDataId);
+        //setData(resDataId);
+        console.log(res.data.body);
         setData(res.data.body);
+
     }
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -146,100 +158,209 @@ const ListaVenta = ({ token,idusuario }) => {
     });
 
 
-    const deleteVenta = async (idventa,idusuario) => {
-        await axios.put(`${URI}/inactiva/`, {idventa,idusuario}, config);
-        getVentas();
-    }
 
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Venta');
-        XLSX.writeFile(wb, 'Venta.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'Vehiculos');
+        XLSX.writeFile(wb, 'Vehiculos.xlsx')
     }
 
-    const updateVentaFinal = async (newData) => {
+    const deleteModelo = async (id) => {
+        await axios.delete(`${URI}/del/${id}`, config)
+        getModelo();
+    }
+
+    const updateModelo = async (newData) => {
         //console.log('Entra en update');
         //console.log(newData)
-        await axios.put(URI + "/put/" + newData.idventa, newData, config
+        await axios.put(URI + "/put/" + newData.idmodelo, newData, config
         );
-        getVentas();
+        getModelo();
     }
 
 
     const columns = [
         {
             title: 'id',
-            dataIndex: 'idventa',
-            width: '5%',
-            editable: false,
-            ...getColumnSearchProps('idventa'),
-        },
-        {
-            title: 'Cliente',
-            dataIndex: 'cliente',
-            editable: false,
-            //width: '22%',
-            //editable: true,
-            //...getColumnSearchProps('nombre'),
-            render: (cliente) => {
-                return (
-                    cliente.razon_social
-                );
-            }
-        },
-        {
-            title: 'Ruc',
-            dataIndex: 'cliente',
-            editable: false,
-            //...getColumnSearchProps('nombre'),
-            render: (cliente) => {
-                return (
-                    cliente.ruc
-                );
-            }
-        },
-        {
-            title: 'Comprobante',
-            dataIndex: 'nro_comprobante',
+            dataIndex: 'idmodelo',
             //width: '5%',
             editable: false,
-            ...getColumnSearchProps('nro_comprobante'),
+            ...getColumnSearchProps('idmodelo'),
         },
         {
-            title: 'Fecha',
-            dataIndex: 'fecha',
-            width: '8%',
-            editable: false,
+            title: 'Modelo',
+            dataIndex: 'modelo',
+            //width: '12%',
+            editable: true,
         },
         {
-            title: 'Monto',
-            dataIndex: 'total',
-            width: '8%',
-            editable: false,
+            title: 'Marca',
+            dataIndex: 'idmarca',
+            //width: '15%',
+            editable: true,
+            render: (_, { marca }) => {
+                return (
+                    marca.descripcion
+                );
+            },
+            //...getColumnSearchProps('proveedor'),
         },
         {
-            title: 'Envio',
-            dataIndex: 'costo_envio',
-            width: '8%',
-            editable: false,
+            title: 'Detalle',
+            dataIndex: 'detalle',
+            //width: '22%',
+            editable: true,
+            ...getColumnSearchProps('descripcion'),
         },
         {
-            title: 'Iva',
-            dataIndex: 'iva_total',
-            width: '8%',
+            title: 'Costo',
+            dataIndex: 'costo',
+            //width: '12%',
+            editable: true,
+        },
+        {
+            title: 'Chasis',
+            dataIndex: 'chasis',
+            //width: '12%',
+            editable: true,
+        },
+        {
+            title: 'Año',
+            dataIndex: 'anho',
+            //width: '12%',
+            editable: true,
+        },
+        {
+            title: 'Matricula',
+            dataIndex: 'matricula',
+            //width: '12%',
+            editable: true,
+        },
+        {
+            title: 'Color',
+            dataIndex: 'color',
+            //width: '12%',
+            editable: true,
+        },
+        {
+            title: 'Imagen',
+            dataIndex: 'img',
+            //width: '8%',
+            editable: true,
+            render: (_, { img }) => {
+                if (img && typeof img !== "string") {
+                    //console.log(typeof img);
+                    const asciiTraducido = Buffer.from(img.data).toString('ascii');
+                    //console.log(asciiTraducido);
+                    if (asciiTraducido) {
+                        return (
+                            <Image
+                                style={{ border: `1px solid gray`, borderRadius: `4px` }}
+                                alt="imagen"
+                                //preview={false}
+                                //style={{ width: '50%',margin:`0px`,textAlign:`center` }}
+                                src={asciiTraducido}
+                            />
+                        );
+                    } else {
+                        return null
+                    }
+                } else {
+                    return null
+                }
+            },
+        },
+        {
+            title: 'Imagen',
+            dataIndex: 'img1',
+            //width: '8%',
+            editable: true,
+            render: (_, { img1 }) => {
+                if (img1 && typeof img1 !== "string") {
+                    //console.log(typeof img);
+                    const asciiTraducido = Buffer.from(img1.data).toString('ascii');
+                    //console.log(asciiTraducido);
+                    if (asciiTraducido) {
+                        return (
+                            <Image
+                                style={{ border: `1px solid gray`, borderRadius: `4px` }}
+                                alt="imagen"
+                                //preview={false}
+                                //style={{ width: '50%',margin:`0px`,textAlign:`center` }}
+                                src={asciiTraducido}
+                            />
+                        );
+                    } else {
+                        return null
+                    }
+                } else {
+                    return null
+                }
+            },
+        },
+        {
+            title: 'Imagen',
+            dataIndex: 'img2',
+            //width: '8%',
+            editable: true,
+            render: (_, { img2 }) => {
+                if (img2 && typeof img2 !== "string") {
+                    //console.log(typeof img);
+                    const asciiTraducido = Buffer.from(img2.data).toString('ascii');
+                    //console.log(asciiTraducido);
+                    if (asciiTraducido) {
+                        return (
+                            <Image
+                                style={{ border: `1px solid gray`, borderRadius: `4px` }}
+                                alt="imagen"
+                                //preview={false}
+                                //style={{ width: '50%',margin:`0px`,textAlign:`center` }}
+                                src={asciiTraducido}
+                            />
+                        );
+                    } else {
+                        return null
+                    }
+                } else {
+                    return null
+                }
+            },
+        },
+        {
+            title: 'Proveedor',
+            dataIndex: 'idproveedor',
+            //width: '15%',
+            editable: true,
+            render: (_, { proveedor }) => {
+                return (
+                    proveedor.razon_social
+                );
+            },
+            //...getColumnSearchProps('proveedor'),
+        },
+        {
+            title: 'Ruc proveedor',
+            dataIndex: 'ruc',
+            //width: '12%',
             editable: false,
+            render: (_, { proveedor }) => {
+                return (
+                    proveedor.ruc
+                );
+            },
+            //...getColumnSearchProps('proveedor'),
         },
         {
             title: 'Estado',
             dataIndex: 'estado',
-            width: '10%',
-            editable: false,
-            render: (_, { estado, idventa }) => {
+            //width: '10%',
+            editable: true,
+            render: (_, { estado, idmodelo }) => {
                 let color = 'black';
                 if (estado.toUpperCase() === 'AC') { color = 'green' }
                 else { color = 'volcano'; }
                 return (
-                    <Tag color={color} key={idventa} >
+                    <Tag color={color} key={idmodelo} >
                         {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
                     </Tag>
                 );
@@ -249,13 +370,11 @@ const ListaVenta = ({ token,idusuario }) => {
             title: 'Accion',
             dataIndex: 'operacion',
             render: (_, record) => {
-
                 const editable = isEditing(record);
-
                 return editable ? (
                     <span>
                         <Typography.Link
-                            onClick={() => save(record.idventa, record)}
+                            onClick={() => save(record.idmodelo, record)}
                             style={{
                                 marginRight: 8,
                             }} >
@@ -268,9 +387,13 @@ const ListaVenta = ({ token,idusuario }) => {
                     </span>
                 ) : (
                     <>
+                        <Typography.Link style={{ margin: `5px` }} disabled={editingKey !== ''} onClick={() => edit(record)}>
+                            Editar
+                        </Typography.Link>
+
                         <Popconfirm
                             title="Desea eliminar este registro?"
-                            onConfirm={() => confirmDel(record.idventa)}
+                            onConfirm={() => confirmDel(record.idmodelo)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No" >
@@ -282,88 +405,33 @@ const ListaVenta = ({ token,idusuario }) => {
                 );
             },
         }
-    ];
+    ]
 
-    const columnDet = [
-        {
-            title: 'iddetalle',
-            dataIndex: 'idventa',
-            key: 'idventa',
-            width: '2%',
-        },
-        {
-            title: 'Producto',
-            dataIndex: 'modelo',
-            width: '2%',
-            render: (modelo)=> {
-                return modelo.modelo
-            }
-        },
-        {
-            title: 'Costo',
-            dataIndex: 'modelo',
-            width: '2%',
-            render: (modelo)=> {
-                return modelo.costo
-            }
-        },
-        {
-            title: 'Descuento',
-            dataIndex: 'descuento',
-            width: '2%',
-        },
-        {
-            title: 'Subtotal',
-            dataIndex: 'subtotal',
-            width: '2%',
-        },
-        {
-            title: 'Estado',
-            dataIndex: 'estado',
-            key: 'estado',
-            width: '2%',
-            render: (_, { estado, idinventario }) => {
-                let color = 'black';
-                if (estado.toUpperCase() === 'AC') { color = 'blue' }
-                else { color = 'volcano'; }
-                return (
-                    <Tag color={color} key={idinventario} >
-                        {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
-                    </Tag>
-                );
-            },
-        },
-        {
-            title: 'Action',
-            dataIndex: 'operation',
-            key: 'operation',
-            width: '5%',
-            render: () => (
-                null
-            ),
-        },
-    ];
+    const edit = (record) => {
+        form.setFieldsValue({
+            ...record,
+        });
+        setEditingKey(record.idmodelo);
+    };
 
 
-    const isEditing = (record) => record.idventa === editingKey;
+    const isEditing = (record) => record.idmodelo === editingKey;
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const confirmDel = (idventa) => {
+    const confirmDel = (idmodelo) => {
         message.success('Procesando');
-        //deleteVentaFinal(idventa);
-        deleteVenta(idventa,idusuario)
+        deleteModelo(idmodelo);
     };
 
-    const save = async (idventa, record) => {
-        //console.log('record:  ',record.img.length);
-        //console.log(idventa);
+    const save = async (idmodelo, record) => {
+
         try {
             const row = await form.validateFields();
             const newData = [...data];
-            const index = newData.findIndex((item) => idventa === item.idventa);
+            const index = newData.findIndex((item) => idmodelo === item.idmodelo);
 
             if (index > -1) {
                 const item = newData[index];
@@ -374,16 +442,18 @@ const ListaVenta = ({ token,idusuario }) => {
                     ...row,
                 });
 
-                if (record.idventa === item.idventa) {
+                if (record.idmodelo === item.idmodelo) {
                     //console.log('Entra en asignacion',record.img);
                     newData[index].img = record.img;
+                    newData[index].img1 = record.img1;
+                    newData[index].img2 = record.img2;
                 }
 
                 newData[index].fecha_upd = strFecha;
 
                 //console.log(newData);
 
-                updateVentaFinal(newData[index]);
+                updateModelo(newData[index]);
                 setData(newData);
                 setEditingKey('');
                 message.success('Registro actualizado');
@@ -417,14 +487,17 @@ const ListaVenta = ({ token,idusuario }) => {
 
     return (
         <>
-            <h3>Venta</h3>
+            <h3>Modelos</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
             <Button type='primary' style={{ backgroundColor: `#E94325`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>
-                <Button type="primary" onClick={() => navigate('/crearventa')} >{<PlusOutlined />} Nuevo</Button>
+                <Button className='success' onClick={() => navigate('/modelototal')} >Total</Button>
             </div>
-            <TableModelExpand columnDet={columnDet} keyDet={'idventa'} token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idventa'} />
+            <div style={{ marginBottom: `5px`, textAlign: `end` }}>
+                <Button type="primary" onClick={() => navigate('/crearmodelo')} >{<PlusOutlined />} Nuevo</Button>
+            </div>
+            <TableModel token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idmodelo'} />
         </>
     )
 }
-export default ListaVenta;
+export default ListaModelo

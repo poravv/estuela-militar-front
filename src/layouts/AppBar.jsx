@@ -41,16 +41,17 @@ const AppBar = ({ usuario }) => {
     const items = [
         getItem(() => navegacion('/'), 'Home', '1', <HomeOutlined />),
         //getItem(() => navegacion('/tablemodel'), 'Option 2', '2', <DesktopOutlined />),
-        getItem(null, 'Mantenimiento', 'sub1', <ToolOutlined />, [
-            getItem(() => navegacion('/proveedor'), 'Proveedor', '3'),
-            getItem(() => navegacion('/articulo'), 'Vehiculos', '4'),
+        getItem(null, 'Configuracion', 'sub1', <ToolOutlined />, [
+            getItem(() => navegacion('/ciudad'), 'Ciudad', '2'),
+            getItem(() => navegacion('/marca'), 'Marca', '3'),
+            getItem(() => navegacion('/proveedor'), 'Proveedor', '4'),
+            getItem(() => navegacion('/modelo'), 'Modelo', '5'),
         ]),
         getItem(null, 'Movimiento', 'sub2', <TeamOutlined />, [
-            getItem(() => navegacion('/cliente'), 'Clientes', '5'),
-            getItem(() => navegacion('/inventario'), 'Playa', '6'),
-            getItem(() => navegacion('/venta'), 'Pedido venta', '7')
+            getItem(() => navegacion('/cliente'), 'Clientes', '6'),
+            getItem(() => navegacion('/venta'), 'Pedido venta', '8')
         ]),
-        getItem(() => Logout(), 'Close session', '8', <LogoutOutlined />)
+        getItem(() => Logout(), 'Close session', '9', <LogoutOutlined />)
     ];
 
 

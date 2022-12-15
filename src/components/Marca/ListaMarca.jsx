@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { useState, useEffect, useRef } from 'react'
-import { Logout } from '../Utils/Logout';
+//import { Logout } from '../Utils/Logout';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import { Popconfirm, Typography } from 'antd';
 import { Form } from 'antd';
-import TableModelExpand from '../TableModel/TableModelExpand';
+import TableModel from '../TableModel/TableModel';
 import { Tag } from 'antd';
 import { message } from 'antd';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
@@ -13,15 +13,14 @@ import Highlighter from 'react-highlight-words';
 import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
-const URI = 'http://186.158.152.141:3002/automot/api/inventario';
-let fechaActual = new Date();
-const ListaInventario = ({ token,idsucursal }) => {
 
-    //console.log('idsuc: ',idsucursal)
+const URI = 'http://186.158.152.141:3002/automot/api/marca/';
+let fechaActual = new Date();
+const ListaMarca = ({ token }) => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState([]);
-    //const [lstProducto, setLstProducto] = useState([]);
+
     const [editingKey, setEditingKey] = useState('');
     const strFecha = fechaActual.getFullYear() + "-" + (fechaActual.getMonth() + 1) + "-" + fechaActual.getDate();
     //---------------------------------------------------
@@ -31,9 +30,9 @@ const ListaInventario = ({ token,idsucursal }) => {
     const searchInput = useRef(null);
     const navigate = useNavigate();
     //---------------------------------------------------
+
     useEffect(() => {
-        getInventario();
-        //getDetInventario();
+        getMarca();
         // eslint-disable-next-line
     }, []);
 
@@ -44,21 +43,13 @@ const ListaInventario = ({ token,idsucursal }) => {
         }
     };
 
-   /*
-    const getDetInventario = async () => {
-        const res = await axios.get(`${URIDETINV}/get`, config)
-        console.log('detalle: ',res.data.body);;
-        setLstProducto(res.data.body);
-    }
-   */
-
-    const getInventario = async () => {
-        const res = await axios.get(URI + `/get/${idsucursal}`, config)
-        setData(res.data.body);
+    const getMarca = async () => {
+        const res = await axios.get(`${URI}/get`, config)
         /*En caso de que de error en el server direcciona a login*/
-        if(res.data.error){
-            Logout();
-        }
+        
+        //if (res.data.error) {Logout();}
+        
+        setData(res.data.body);
     }
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -156,68 +147,52 @@ const ListaInventario = ({ token,idsucursal }) => {
     });
 
 
-    const deleteDetInventario = async (iddet_inventario,cantidad,idinventario) => {
-        try {
-            await axios.put(`${URI}/inactiva/${iddet_inventario}`,{estado:'IN',cantidad:cantidad,idinventario:idinventario}, config);
-        } catch (error) {
-            console.log(error)
-        }
-        //getDetInventario();
-    }
 
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Inventario');
-        XLSX.writeFile(wb, 'Inventario.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'Marcas');
+        XLSX.writeFile(wb, 'Marcas.xlsx')
     }
 
-    const updateInventario = async (newData) => {
+    const deleteMarca = async (id) => {
+        await axios.delete(`${URI}/del/${id}`, config)
+        getMarca();
+    }
+
+    const updateMarca = async (newData) => {
         //console.log('Entra en update');
         //console.log(newData)
-        await axios.put(URI + "put/" + newData.idinventario, newData, config
+        await axios.put(URI + "put/" + newData.idmarca, newData, config
         );
-        getInventario();
+        getMarca();
     }
-
 
     const columns = [
         {
             title: 'id',
-            dataIndex: 'idinventario',
-            width: '7%',
+            dataIndex: 'idmarca',
+            width: '5%',
             editable: false,
-            ...getColumnSearchProps('idinventario'),
+            ...getColumnSearchProps('idmarca'),
         },
         {
-            title: 'Parte',
-            dataIndex: 'producto',
-            width: '22%',
+            title: 'Cliente',
+            dataIndex: 'descripcion',
+            //width: '22%',
             editable: true,
-            render: (_, { producto }) => {
-                //console.log(producto);
-                return (
-                    producto.descripcion
-                );
-            },
-            //...getColumnSearchProps('producto'),
-        },
-        {
-            title: 'Canridad',
-            dataIndex: 'cantidad_total',
-            width: '12%',
-            //editable: true,
+            ...getColumnSearchProps('descripcion'),
         },
         {
             title: 'Estado',
             dataIndex: 'estado',
-            width: '10%',
+            //width: '7%',
             editable: true,
-            render: (_, { estado, idinventario }) => {
+            render: (_, { estado, idmarca }) => {
                 let color = 'black';
                 if (estado.toUpperCase() === 'AC') { color = 'green' }
                 else { color = 'volcano'; }
                 return (
-                    <Tag color={color} key={idinventario} >
+                    <Tag color={color} key={idmarca} >
                         {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
                     </Tag>
                 );
@@ -233,7 +208,7 @@ const ListaInventario = ({ token,idsucursal }) => {
                 return editable ? (
                     <span>
                         <Typography.Link
-                            onClick={() => save(record.idinventario, record)}
+                            onClick={() => save(record.idmarca)}
                             style={{
                                 marginRight: 8,
                             }} >
@@ -246,12 +221,14 @@ const ListaInventario = ({ token,idsucursal }) => {
                     </span>
                 ) : (
                     <>
+
                         <Typography.Link style={{ margin: `5px` }} disabled={editingKey !== ''} onClick={() => edit(record)}>
                             Editar
                         </Typography.Link>
+
                         <Popconfirm
                             title="Desea eliminar este registro?"
-                            onConfirm={() => confirmDel(record.iddet_inventario,record.cantidad,record.idinventario)}
+                            onConfirm={() => confirmDel(record.idmarca)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No" >
@@ -259,103 +236,53 @@ const ListaInventario = ({ token,idsucursal }) => {
                                 Borrar
                             </Typography.Link>
                         </Popconfirm>
+
                     </>
                 );
             },
         }
-    ];
-
-    const columnDet = [
-        {
-            title: 'iddetalle',
-            dataIndex: 'iddet_inventario',
-            key: 'iddet_inventario',
-            width: '2%',
-        },
-        {
-            title: 'Cantidad',
-            dataIndex: 'cantidad',
-            key: 'cantidad',
-            width: '2%',
-        },
-        {
-            title: 'Estado',
-            dataIndex: 'estado',
-            key: 'estado',
-            width: '2%',
-            render: (_, { estado, idinventario }) => {
-                let color = 'black';
-                if (estado.toUpperCase() === 'AC') { color = 'blue' }
-                else { color = 'volcano'; }
-                return (
-                    <Tag color={color} key={idinventario} >
-                        {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
-                    </Tag>
-                );
-            },
-        },
-        {
-            title: 'Action',
-            dataIndex: 'operation',
-            key: 'operation',
-            width: '5%',
-            render: () => (
-                null
-            ),
-        },
-    ];
-
+    ]
 
     const edit = (record) => {
         form.setFieldsValue({
             ...record,
         });
-        setEditingKey(record.idinventario);
+        setEditingKey(record.idmarca);
     };
 
 
-    const isEditing = (record) => record.idinventario === editingKey;
+    const isEditing = (record) => record.idmarca === editingKey;
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const confirmDel = (iddet_inventario,cantidad,idinventario) => {
+    const confirmDel = (idmarca) => {
         message.success('Procesando');
-        //deleteInventario(idinventario);
-        //deleteProducto(idinventario)
-        deleteDetInventario(iddet_inventario,cantidad,idinventario)
+        deleteMarca(idmarca);
     };
 
-    const save = async (idinventario, record) => {
-        //console.log('record:  ',record.img.length);
-        //console.log(idinventario);
+    const save = async (idmarca) => {
+
         try {
             const row = await form.validateFields();
             const newData = [...data];
-            const index = newData.findIndex((item) => idinventario === item.idinventario);
+            const index = newData.findIndex((item) => idmarca === item.idmarca);
 
             if (index > -1) {
-                const item = newData[index];
-                //console.log(newData);
 
+                const item = newData[index];
                 newData.splice(index, 1, {
                     ...item,
                     ...row,
                 });
 
-                if (record.idinventario === item.idinventario) {
-                    //console.log('Entra en asignacion',record.img);
-                    newData[index].img = record.img;
-                }
-
                 newData[index].fecha_upd = strFecha;
-
                 //console.log(newData);
-
-                updateInventario(newData[index]);
+                updateMarca(newData[index]);
                 setData(newData);
                 setEditingKey('');
+
                 message.success('Registro actualizado');
             } else {
                 newData.push(row);
@@ -387,14 +314,15 @@ const ListaInventario = ({ token,idsucursal }) => {
 
     return (
         <>
-            <h3>Inventario</h3>
+            <h3>Marcas</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
             <Button type='primary' style={{ backgroundColor: `#E94325`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>
-                <Button type="primary" onClick={() => navigate('/crearinv')} >{<PlusOutlined />} Cargar</Button>
+
+                <Button type="primary" onClick={() => navigate('/crearmarca')} >{<PlusOutlined />} Nuevo</Button>
             </div>
-            <TableModelExpand columnDet={columnDet} keyDet={'iddet_inventario'} token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idinventario'} />
+            <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idmarca'} />
         </>
     )
 }
-export default ListaInventario;
+export default ListaMarca

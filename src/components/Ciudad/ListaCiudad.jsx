@@ -14,12 +14,13 @@ import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
 
-const URI = 'http://186.158.152.141:3002/automot/api/producto/';
+const URI = 'http://186.158.152.141:3002/automot/api/ciudad/';
 let fechaActual = new Date();
-const ListaProductos = ({ token }) => {
+const ListaCiudad = ({ token }) => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState([]);
+
     const [editingKey, setEditingKey] = useState('');
     const strFecha = fechaActual.getFullYear() + "-" + (fechaActual.getMonth() + 1) + "-" + fechaActual.getDate();
     //---------------------------------------------------
@@ -30,9 +31,8 @@ const ListaProductos = ({ token }) => {
     const navigate = useNavigate();
     //---------------------------------------------------
 
-
     useEffect(() => {
-        getProducto();
+        getCiudad();
         // eslint-disable-next-line
     }, []);
 
@@ -43,23 +43,23 @@ const ListaProductos = ({ token }) => {
         }
     };
 
-    const getProducto = async () => {
+    const getCiudad = async () => {
         const res = await axios.get(`${URI}/get`, config)
         /*En caso de que de error en el server direcciona a login*/
         if (res.data.error) {
             Logout();
         }
+        /*
         const resDataId = [];
 
         res.data.body.map((rs) => {
-            //rs.key = rs.idproducto;
-            //rs.razon_social= rs.proveedor.razon_social;
-            //rs.ruc= rs.proveedor.ruc;
+            rs.key = rs.idciudad;
             resDataId.push(rs);
             return true;
         })
-        //console.log(resDataId);
         setData(resDataId);
+        */
+        setData(res.data.body);
     }
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -160,80 +160,49 @@ const ListaProductos = ({ token }) => {
 
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Partes');
-        XLSX.writeFile(wb, 'Partes.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'Ciudades');
+        XLSX.writeFile(wb, 'Ciudades.xlsx')
     }
 
-    const deleteProducto = async (id) => {
+    const deleteCiudad = async (id) => {
         await axios.delete(`${URI}/del/${id}`, config)
-        getProducto();
+        getCiudad();
     }
 
-    const updateProducto = async (newData) => {
+    const updateCiudad = async (newData) => {
         //console.log('Entra en update');
         //console.log(newData)
-        await axios.put(URI + "put/" + newData.idproducto, newData, config
+        await axios.put(URI + "put/" + newData.idciudad, newData, config
         );
-        getProducto();
+        getCiudad();
     }
-
 
     const columns = [
         {
             title: 'id',
-            dataIndex: 'idproducto',
+            dataIndex: 'idciudad',
             width: '5%',
             editable: false,
-            ...getColumnSearchProps('idproducto'),
+            ...getColumnSearchProps('idciudad'),
         },
         {
-            title: 'Descripcion',
+            title: 'Cliente',
             dataIndex: 'descripcion',
-            width: '22%',
+            //width: '22%',
             editable: true,
             ...getColumnSearchProps('descripcion'),
         },
         {
-            title: 'Precio',
-            dataIndex: 'precio',
-            width: '12%',
-            editable: true,
-        },
-        {
-            title: 'Proveedor',
-            dataIndex: 'idproveedor',
-            width: '15%',
-            editable: true,
-            render: (_, { proveedor }) => {
-                return (
-                    proveedor.razon_social
-                );
-            },
-            //...getColumnSearchProps('proveedor'),
-        },
-        {
-            title: 'Ruc proveedor',
-            dataIndex: 'ruc',
-            width: '12%',
-            editable: false,
-            render: (_, { proveedor }) => {
-                return (
-                    proveedor.ruc
-                );
-            },
-            //...getColumnSearchProps('proveedor'),
-        },
-        {
             title: 'Estado',
             dataIndex: 'estado',
-            width: '10%',
+            //width: '7%',
             editable: true,
-            render: (_, { estado, idproducto }) => {
+            render: (_, { estado, idciudad }) => {
                 let color = 'black';
                 if (estado.toUpperCase() === 'AC') { color = 'green' }
                 else { color = 'volcano'; }
                 return (
-                    <Tag color={color} key={idproducto} >
+                    <Tag color={color} key={idciudad} >
                         {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
                     </Tag>
                 );
@@ -243,11 +212,13 @@ const ListaProductos = ({ token }) => {
             title: 'Accion',
             dataIndex: 'operacion',
             render: (_, record) => {
+
                 const editable = isEditing(record);
+
                 return editable ? (
                     <span>
                         <Typography.Link
-                            onClick={() => save(record.idproducto)}
+                            onClick={() => save(record.idciudad)}
                             style={{
                                 marginRight: 8,
                             }} >
@@ -260,13 +231,14 @@ const ListaProductos = ({ token }) => {
                     </span>
                 ) : (
                     <>
+
                         <Typography.Link style={{ margin: `5px` }} disabled={editingKey !== ''} onClick={() => edit(record)}>
                             Editar
                         </Typography.Link>
 
                         <Popconfirm
                             title="Desea eliminar este registro?"
-                            onConfirm={() => confirmDel(record.idproducto)}
+                            onConfirm={() => confirmDel(record.idciudad)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No" >
@@ -274,6 +246,7 @@ const ListaProductos = ({ token }) => {
                                 Borrar
                             </Typography.Link>
                         </Popconfirm>
+
                     </>
                 );
             },
@@ -284,44 +257,42 @@ const ListaProductos = ({ token }) => {
         form.setFieldsValue({
             ...record,
         });
-        setEditingKey(record.idproducto);
+        setEditingKey(record.idciudad);
     };
 
 
-    const isEditing = (record) => record.idproducto === editingKey;
+    const isEditing = (record) => record.idciudad === editingKey;
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const confirmDel = (idproducto) => {
+    const confirmDel = (idciudad) => {
         message.success('Procesando');
-        deleteProducto(idproducto);
+        deleteCiudad(idciudad);
     };
 
-    const save = async (idproducto) => {
-        
+    const save = async (idciudad) => {
+
         try {
             const row = await form.validateFields();
             const newData = [...data];
-            const index = newData.findIndex((item) => idproducto === item.idproducto);
+            const index = newData.findIndex((item) => idciudad === item.idciudad);
 
             if (index > -1) {
-                const item = newData[index];
-                //console.log(newData);
 
+                const item = newData[index];
                 newData.splice(index, 1, {
                     ...item,
                     ...row,
                 });
 
                 newData[index].fecha_upd = strFecha;
-
                 //console.log(newData);
-
-                updateProducto(newData[index]);
+                updateCiudad(newData[index]);
                 setData(newData);
                 setEditingKey('');
+
                 message.success('Registro actualizado');
             } else {
                 newData.push(row);
@@ -353,14 +324,15 @@ const ListaProductos = ({ token }) => {
 
     return (
         <>
-            <h3>Partes</h3>
+            <h3>Ciudades</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
             <Button type='primary' style={{ backgroundColor: `#E94325`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>
-                <Button type="primary" onClick={() => navigate('/creararticulo')} >{<PlusOutlined />} Nuevo</Button>
+
+                <Button type="primary" onClick={() => navigate('/crearciudad')} >{<PlusOutlined />} Nuevo</Button>
             </div>
-            <TableModel token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idproducto'} />
+            <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idciudad'} />
         </>
     )
 }
-export default ListaProductos
+export default ListaCiudad

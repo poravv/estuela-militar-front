@@ -4,10 +4,11 @@ import { Form, Input, InputNumber, Table, Select } from 'antd';
 import { Spin } from 'antd';
 import Buscador from '../Buscador/Buscador';
 import UploadFile from '../Utils/Upload';
-import { Buffer } from 'buffer'
+import { Buffer } from 'buffer';
 
 const { Option } = Select;
 const URIPROV = 'http://186.158.152.141:3002/automot/api/proveedor/';
+const URIMARCA = 'http://186.158.152.141:3002/automot/api/marca/';
 const URICIUDAD = 'http://186.158.152.141:3002/automot/api/ciudad/';
 
 function TableModel({ token, form, data, mergedColumns, keyExtraido }) {
@@ -18,11 +19,13 @@ function TableModel({ token, form, data, mergedColumns, keyExtraido }) {
 
     const [previewImage, setPreviewImage] = useState('');
     const [proveedores, setProveedores] = useState([]);
+    const [marca, setMarca] = useState([]);
     const [ciudades, setCiudades] = useState([]);
 
     useEffect(() => {
       getProveedor();
       getCiudad();
+      getMarca();
       // eslint-disable-next-line
     }, []);
 
@@ -36,6 +39,11 @@ function TableModel({ token, form, data, mergedColumns, keyExtraido }) {
     const getProveedor = async () => {
       const res = await axios.get(`${URIPROV}/get`, config);
       setProveedores(res.data.body);
+    }
+
+    const getMarca = async () => {
+      const res = await axios.get(`${URIMARCA}/get`, config);
+      setMarca(res.data.body);
     }
 
     const getCiudad = async () => {
@@ -90,6 +98,16 @@ function TableModel({ token, form, data, mergedColumns, keyExtraido }) {
                 : (children)
             }
           </td>);
+      //Marca
+      case 'idmarca':
+        return (
+          <td {...restProps}>
+            {
+              editing ?
+                <Buscador label={'descripcion'} value={'idmarca'} data={marca} dataIndex={dataIndex} title={title} />
+                : (children)
+            }
+          </td>);
       //Ciudad
       case 'idciudad':
         return (
@@ -101,7 +119,6 @@ function TableModel({ token, form, data, mergedColumns, keyExtraido }) {
             }
           </td>);
       case 'img':
-        //console.log(dataIndex);
         return (
           <td {...restProps}>
             {
@@ -109,19 +126,62 @@ function TableModel({ token, form, data, mergedColumns, keyExtraido }) {
               editing ?
                 <Form.Item name={dataIndex} style={{ margin: 0, }}  >
                   <UploadFile previewImage={previewImage} setPreviewImage={setPreviewImage} >
-                    
-                      { //Aqui la logica de si actualiza o no las imagenes del formulario
-                      (previewImage!=='' && previewImage !=null) ? 
-                          record.img=previewImage : 
-                          record.img ? 
-                          record.img = Buffer.from(record.img).toString('ascii'):
+
+                    { //Aqui la logica de si actualiza o no las imagenes del formulario
+                      (previewImage !== '' && previewImage != null) ?
+                        record.img = previewImage :
+                        record.img ?
+                          record.img = Buffer.from(record.img).toString('ascii') :
                           null}
-                    
+
                   </UploadFile>
                 </Form.Item>
                 : (children)
             }
           </td>);
+
+case 'img1':
+  return (
+    <td {...restProps}>
+      {
+        //
+        editing ?
+          <Form.Item name={dataIndex} style={{ margin: 0, }}  >
+            <UploadFile previewImage={previewImage} setPreviewImage={setPreviewImage} >
+
+              { //Aqui la logica de si actualiza o no las imagenes del formulario
+                (previewImage !== '' && previewImage != null) ?
+                  record.img1 = previewImage :
+                  record.img1 ?
+                    record.img1 = Buffer.from(record.img1).toString('ascii') :
+                    null}
+
+            </UploadFile>
+          </Form.Item>
+          : (children)
+      }
+    </td>);
+    case 'img2':
+      return (
+        <td {...restProps}>
+          {
+            //
+            editing ?
+              <Form.Item name={dataIndex} style={{ margin: 0, }}  >
+                <UploadFile previewImage={previewImage} setPreviewImage={setPreviewImage} >
+
+                  { //Aqui la logica de si actualiza o no las imagenes del formulario
+                    (previewImage !== '' && previewImage != null) ?
+                      record.img2 = previewImage :
+                      record.img2 ?
+                        record.img2 = Buffer.from(record.img2).toString('ascii') :
+                        null}
+
+                </UploadFile>
+              </Form.Item>
+              : (children)
+          }
+        </td>);
       //break;
       default:
         return (
@@ -153,8 +213,8 @@ function TableModel({ token, form, data, mergedColumns, keyExtraido }) {
             columns={mergedColumns}
             rowClassName="editable-row"
             scroll={{
-              x: 'calc(700px + 50%)',
-              y: 400,
+              x: 'calc(800px + 100%)',
+              y: 1500,
             }}
 
           //pagination={{onChange: setCantidadRow,pageSize: 50,}}

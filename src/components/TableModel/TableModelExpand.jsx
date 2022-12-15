@@ -121,8 +121,8 @@ function TableModelExpand({ token, form, data, mergedColumns, keyExtraido,column
             )}
             rowClassName="editable-row"
             scroll={{
-              x: 'calc(700px + 50%)',
-              y: 400,
+              x: 'calc(800px + 100%)',
+              y: 1500,
             }}
           //pagination={{onChange: setCantidadRow,pageSize: 50,}}
           />
