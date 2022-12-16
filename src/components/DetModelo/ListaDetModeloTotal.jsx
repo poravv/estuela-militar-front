@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Buffer } from 'buffer';
 const { Meta } = Card;
 
-const URI = 'http://186.158.152.141:3002/automot/api/modelo';
+const URI = 'http://186.158.152.141:3002/automot/api/detmodelo';
 const ListaModelo = ({ token, idsucursal }) => {
 
 
@@ -75,17 +75,18 @@ const ListaModelo = ({ token, idsucursal }) => {
 
     return (
         <>
-            <h3>Autos</h3>
+            <h3>Total playa</h3>
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>
-                <Button onClick={() => navigate('/modelo')} >Atras</Button>
+                <Button onClick={() => navigate('/detmodelo')} >Lista disponible</Button>
             </div>
-            <div style={{ display:`flex` }}>
+            <div style={{ display:`flex`,flexWrap:`wrap` }}>
                 {data ? data.map((auto, index) => {
                     return (
                         <Card
                             hoverable
                             key={index}
-                            style={{ width: 200,margin:`5px` }}
+                            
+                            style={{ width: 200,margin:`5px`,background:`#E8F0F7` }}
                             //cover={viewImage(auto.img)}
                             cover={<Carousel afterChange={onChangeCarousel}>
                                 <div>
@@ -99,7 +100,7 @@ const ListaModelo = ({ token, idsucursal }) => {
                                 </div>
                             </Carousel>}
                         >
-                            <Meta title={auto.modelo} description={auto.costo} />
+                            <Meta title={auto.modelo.descripcion} description={auto.costo} />
 
                             {auto.detalle}
                             <p>{auto.color}</p>

@@ -5,7 +5,8 @@ import {
     HomeOutlined,
     TeamOutlined,
     ToolOutlined,
-    LogoutOutlined
+    LogoutOutlined,
+    PieChartOutlined
 } from '@ant-design/icons';
 import { Layout, Menu,Image } from 'antd';
 import { Outlet } from 'react-router-dom';
@@ -44,14 +45,19 @@ const AppBar = ({ usuario }) => {
         getItem(null, 'Configuracion', 'sub1', <ToolOutlined />, [
             getItem(() => navegacion('/ciudad'), 'Ciudad', '2'),
             getItem(() => navegacion('/marca'), 'Marca', '3'),
-            getItem(() => navegacion('/proveedor'), 'Proveedor', '4'),
-            getItem(() => navegacion('/modelo'), 'Modelo', '5'),
+            getItem(() => navegacion('/modelo'), 'Modelo', '4'),
+            getItem(() => navegacion('/proveedor'), 'Proveedor', '5'),
+            getItem(() => navegacion('/detmodelo'), 'Playa', '6'),
         ]),
         getItem(null, 'Movimiento', 'sub2', <TeamOutlined />, [
-            getItem(() => navegacion('/cliente'), 'Clientes', '6'),
+            getItem(() => navegacion('/cliente'), 'Clientes', '7'),
             getItem(() => navegacion('/venta'), 'Pedido venta', '8')
         ]),
-        getItem(() => Logout(), 'Close session', '9', <LogoutOutlined />)
+        getItem(null, 'Reportes', 'sub3', <PieChartOutlined />, [
+            getItem(() => navegacion('/repomodelos'), 'Estadisticas', '9'),
+            getItem(() => navegacion('/informes'), 'Informes', '10'),
+        ]),
+        getItem(() => Logout(), 'Close session', '11', <LogoutOutlined />)
     ];
 
 

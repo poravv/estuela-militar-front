@@ -186,7 +186,7 @@ const ListaCiudad = ({ token }) => {
             ...getColumnSearchProps('idciudad'),
         },
         {
-            title: 'Cliente',
+            title: 'Descripcion',
             dataIndex: 'descripcion',
             //width: '22%',
             editable: true,

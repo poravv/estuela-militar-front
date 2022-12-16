@@ -1,13 +1,16 @@
 import React from 'react'
 import '../CSS/Cuerpo.css';
+import ReportePlaya from './Reportes/ReportePlaya';
 
 
-export const Inicio = ({ token,usuario }) => {
+export const Inicio = ({ token,usuario,idsucursal }) => {
     
     return (
         <div className='container'>
-            <h2>Home page</h2>
+            <ReportePlaya token={token} />
         </div>
     );
 }
 export default Inicio;
+
+//<ListaDetModeloTotal token={token} idsucursal={idsucursal} />

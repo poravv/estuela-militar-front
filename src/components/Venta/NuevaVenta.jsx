@@ -11,7 +11,7 @@ import Table from 'react-bootstrap/Table';
 
 const URI = 'http://186.158.152.141:3002/automot/api/venta';
 const URIINVDET = 'http://186.158.152.141:3002/automot/api/detventa';
-const URIMODELO = 'http://186.158.152.141:3002/automot/api/modelo';
+const URIMODELO = 'http://186.158.152.141:3002/automot/api/detmodelo';
 const URICLI = 'http://186.158.152.141:3002/automot/api/cliente';
 
 
@@ -27,14 +27,14 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
     const [total, setTotal] = useState(0);
     const [totalIva, setTotalIva] = useState(0);
     const [descuento, setDescuento] = useState(0);
-    const [modeloSelect, setModeloSelect] = useState(0);
+    const [detmodeloSelect, setDetmodeloSelect] = useState(0);
     const [cliente, setCliente] = useState(0);
     const navigate = useNavigate();
-    const [lstmodelo, setLstmodelo] = useState([]);
+    const [lstdetmodelo, setLstdetmodelo] = useState([]);
     const [lstClientes, setLstClientes] = useState([]);
 
     useEffect(() => {
-        getmodelos();
+        getdetmodelos();
         getClientes();
         verificaproceso();
         // eslint-disable-next-line
@@ -47,10 +47,21 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
         }
     };
 
-    const getmodelos = async () => {
+    const getdetmodelos = async () => {
         const res = await axios.get(`${URIMODELO}/getsucursal/${idsucursal}`, config);
-        console.log(res.data);
-        setLstmodelo(res.data.body);
+        
+        //console.log(res.data);
+        let detModel = [];
+
+        res.data.body.map((dm) => {
+            dm.descmodelo = dm.modelo.descripcion;
+            detModel.push(dm)
+            return true;
+        })
+
+        console.log(detModel);
+
+        setLstdetmodelo(detModel);
     }
 
     const getClientes = async () => {
@@ -70,9 +81,9 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
         await axios.post(URIINVDET + "/post/", valores, config);
     }
 
-    const actualizaModelo = async (idmodelo) => {
-        console.log('Entra en ups modelo: ',idmodelo)
-        await axios.put(URIMODELO + `/put/${idmodelo}`, {estado:'VE'}, config);
+    const actualizaDetmodelo = async (iddet_modelo) => {
+        //console.log('Entra en ups detmodelo: ',iddet_modelo)
+        await axios.put(URIMODELO + `/put/${iddet_modelo}`, {estado:'VE'}, config);
     }
 
 
@@ -98,20 +109,20 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
                     //Guardado del detalle
                     tblventatmp.map((venta) => {
                         console.log(venta);
-                        console.log('idmodelo: ', venta.modelo.idmodelo)
+                        console.log('iddet_modelo: ', venta.detmodelo.iddet_modelo)
                         console.log('descuento: ',venta.descuento)
-                        console.log('subtotal: ',(venta.modelo.costo))
+                        console.log('subtotal: ',(venta.detmodelo.costo))
                         console.log('idventa: ',(cabecera.data.body.idventa))
                         
                         guardaDetalle({
-                            idmodelo: venta.modelo.idmodelo,
-                            //estado: venta.modelo.estado,
+                            iddet_modelo: venta.detmodelo.iddet_modelo,
+                            //estado: venta.detmodelo.estado,
                             estado:'AC',
                             descuento: venta.descuento,
                             idventa: cabecera.data.body.idventa,
-                            subtotal: venta.modelo.costo,
+                            subtotal: venta.detmodelo.costo,
                         });
-                        actualizaModelo(venta.modelo.idmodelo);
+                        actualizaDetmodelo(venta.detmodelo.iddet_modelo);
 
                         return true;
 
@@ -138,28 +149,28 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
     const agregarLista = async (e) => {
         e.preventDefault();
         
-        //console.log(modeloSelect);
+        //console.log(detmodeloSelect);
 
-        //Validacion de existencia del modelo dentro de la lista 
-        //const modeloSelect = lstmodelo.filter((inv) => inv.idmodelo === idmodeloSelect);
-        const validExist = tblventatmp.filter((inv) => inv.idmodelo === modeloSelect.idmodelo);
+        //Validacion de existencia del detmodelo dentro de la lista 
+        //const detmodeloSelect = lstdetmodelo.filter((inv) => inv.iddet_modelo === iddet_modeloSelect);
+        const validExist = tblventatmp.filter((inv) => inv.iddet_modelo === detmodeloSelect.iddet_modelo);
 
-        if (modeloSelect !== null) {
+        if (detmodeloSelect !== null) {
                 if (validExist.length === 0) {
                         tblventatmp.push({
-                            idmodelo: modeloSelect.idmodelo,
-                            modelo: modeloSelect,
+                            iddet_modelo: detmodeloSelect.iddet_modelo,
+                            detmodelo: detmodeloSelect,
                             descuento: descuento
                         });
 
-                        setTotal(parseInt(total + (modeloSelect.costo) - descuento));
-                        setTotalIva(parseInt(totalIva + ((modeloSelect.costo*modeloSelect.tipo_iva/100))));
+                        setTotal(parseInt(total + (detmodeloSelect.costo) - descuento));
+                        setTotalIva(parseInt(totalIva + ((detmodeloSelect.costo*detmodeloSelect.tipo_iva/100))));
 
                     } else {
                         message.warning('Producto ya existe');
                     }
         } else {
-            message.warning('Seleccione un modelo');
+            message.warning('Seleccione un detmodelo');
         }
     }
 
@@ -168,14 +179,14 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
         navigate('/venta');
     }
 
-    const onChangemodelo = (value) => {
-        //console.log(value);
-        //console.log(lstmodelo);
-        lstmodelo.find((element) => {
+    const onChangedetmodelo = (value) => {
+        console.log(value);
+        //console.log(lstdetmodelo);
+        lstdetmodelo.find((element) => {
             
-            if (element.idmodelo === value) {
+            if (element.iddet_modelo === value) {
                 //console.log(element);
-                setModeloSelect(element)
+                setDetmodeloSelect(element)
                 return true;
             } else {
                 return false;
@@ -203,14 +214,8 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
     const extraerRegistro = async (e,id, costo, monto_iva) => {
         e.preventDefault();
         //console.log('Datos: ',costo,monto_iva)
-        const updtblVenta = tblventatmp.filter(inv => inv.idmodelo !== id);
+        const updtblVenta = tblventatmp.filter(inv => inv.iddet_modelo !== id);
         setTblVentaTmp(updtblVenta);
-
-        try {
-            await axios.post(URI + `/operacionventa/${id}-retorno-${idusuario}-0`, {}, config);
-        } catch (error) {
-            console.log('Error: ', error);
-        }
 
         setTotal(total - costo);
         setTotalIva(totalIva - monto_iva);
@@ -237,7 +242,7 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
 
                     <Row style={{ justifyContent: `center`, margin: `10px` }}>
                         <Col style={{ marginLeft: `15px` }}>
-                            <Buscador label={'modelo'} title={'Modelo'} value={'idmodelo'} data={lstmodelo} onChange={onChangemodelo} onSearch={onSearch} />
+                            <Buscador label={'descmodelo'} title={'Auto'} value={'iddet_modelo'} data={lstdetmodelo} onChange={onChangedetmodelo} onSearch={onSearch} />
                         </Col>
                         <Col>
                             <Form.Item name="descuento" >
@@ -254,7 +259,7 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
                         <Table striped bordered hover style={{ backgroundColor:`white` }}>
                             <thead className='table-primary'>
                                 <tr>
-                                    <th>modelo</th>
+                                    <th>Modelo</th>
                                     <th>Costo</th>
                                     <th>Descuento</th>
                                     <th>Iva</th>
@@ -266,16 +271,16 @@ function NuevaVenta({ token, idusuario, idsucursal }) {
                             </thead>
                             <tbody>
                                 {tblventatmp.length !== 0 ? tblventatmp.map((inv) => (
-                                    <tr key={inv.idmodelo}>
-                                        <td> {inv.modelo.modelo} </td>
-                                        <td> {inv.modelo.costo} </td>
+                                    <tr key={inv.iddet_modelo}>
+                                        <td> {inv.detmodelo.descmodelo} </td>
+                                        <td> {inv.detmodelo.costo} </td>
                                         <td> {inv.descuento} </td>
-                                        <td> {inv.modelo.tipo_iva + '%'} </td>
-                                        <td> {inv.modelo.costo*inv.modelo.tipo_iva/100} </td>
-                                        <td> {(inv.modelo.costo*inv.modelo.tipo_iva/100)} </td>
-                                        <td> {inv.modelo.costo} </td>
+                                        <td> {inv.detmodelo.tipo_iva + '%'} </td>
+                                        <td> {inv.detmodelo.costo*inv.detmodelo.tipo_iva/100} </td>
+                                        <td> {(inv.detmodelo.costo*inv.detmodelo.tipo_iva/100)} </td>
+                                        <td> {inv.detmodelo.costo} </td>
                                         <td>
-                                            <button onClick={(e) => extraerRegistro(e,inv.idmodelo, (inv.modelo.costo - descuento), parseInt((inv.modelo.costo*inv.modelo.tipo_iva)/100))} className='btn btn-danger'><IoTrashOutline /></button>
+                                            <button onClick={(e) => extraerRegistro(e,inv.iddet_modelo, (inv.detmodelo.costo - descuento), parseInt((inv.detmodelo.costo*inv.detmodelo.tipo_iva)/100))} className='btn btn-danger'><IoTrashOutline /></button>
                                         </td>
                                     </tr>
                                 )) : null

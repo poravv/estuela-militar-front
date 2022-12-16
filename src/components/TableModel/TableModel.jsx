@@ -104,7 +104,17 @@ function TableModel({ token, form, data, mergedColumns, keyExtraido }) {
           <td {...restProps}>
             {
               editing ?
-                <Buscador label={'descripcion'} value={'idmarca'} data={marca} dataIndex={dataIndex} title={title} />
+                <Buscador  label={'descripcion'} value={'idmarca'} data={marca} dataIndex={dataIndex} title={title} />
+                : (children)
+            }
+          </td>);
+      //Modelo
+      case 'idmodelo':
+        return (
+          <td {...restProps}>
+            {
+              editing ?
+                <Buscador label={'descripcion'} value={'idmodelo'} data={marca} dataIndex={dataIndex} title={title} />
                 : (children)
             }
           </td>);

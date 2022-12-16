@@ -44,7 +44,7 @@ const ListaVenta = ({ token,idusuario }) => {
     const getVentas = async () => {
         const res = await axios.get(`${URI}/getvenusu/${idusuario}`, config)
         /*En caso de que de error en el server direcciona a login*/
-        console.log(res.data);
+        //console.log(res.data.body);
 
         //if (res.data.error) {Logout();}
         
@@ -293,18 +293,20 @@ const ListaVenta = ({ token,idusuario }) => {
         },
         {
             title: 'Producto',
-            dataIndex: 'modelo',
+            dataIndex: 'det_modelo',
             width: '2%',
-            render: (modelo)=> {
-                return modelo.modelo
+            render: (det_modelo)=> {
+                //console.log(det_modelo)
+                return det_modelo.modelo.descripcion
             }
         },
         {
             title: 'Costo',
-            dataIndex: 'modelo',
+            dataIndex: 'det_modelo',
             width: '2%',
-            render: (modelo)=> {
-                return modelo.costo
+            render: (det_modelo)=> {
+                //console.log(det_modelo)
+                return det_modelo.costo
             }
         },
         {

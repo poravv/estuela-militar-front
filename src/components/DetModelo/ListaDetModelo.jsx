@@ -8,19 +8,19 @@ import TableModel from '../TableModel/TableModel';
 import { Tag } from 'antd';
 import { message } from 'antd';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Input, Space } from 'antd';
+import { Button, Input, Space, Image } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
+import { Buffer } from 'buffer'
 
-const URI = 'http://186.158.152.141:3002/automot/api/marca/';
+const URI = 'http://186.158.152.141:3002/automot/api/detmodelo';
 let fechaActual = new Date();
-const ListaMarca = ({ token }) => {
+const ListaDetModelo = ({ token,idsucursal }) => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState([]);
-
     const [editingKey, setEditingKey] = useState('');
     const strFecha = fechaActual.getFullYear() + "-" + (fechaActual.getMonth() + 1) + "-" + fechaActual.getDate();
     //---------------------------------------------------
@@ -31,8 +31,9 @@ const ListaMarca = ({ token }) => {
     const navigate = useNavigate();
     //---------------------------------------------------
 
+
     useEffect(() => {
-        getMarca();
+        getModelo();
         // eslint-disable-next-line
     }, []);
 
@@ -43,13 +44,11 @@ const ListaMarca = ({ token }) => {
         }
     };
 
-    const getMarca = async () => {
-        const res = await axios.get(`${URI}/get`, config)
-        /*En caso de que de error en el server direcciona a login*/
-        
-        //if (res.data.error) {Logout();}
-        
+    const getModelo = async () => {
+        const res = await axios.get(`${URI}/getsucursal/${idsucursal}`, config)
+        console.log(res.data.body);
         setData(res.data.body);
+
     }
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -150,49 +149,211 @@ const ListaMarca = ({ token }) => {
 
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Marcas');
-        XLSX.writeFile(wb, 'Marcas.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'Vehiculos');
+        XLSX.writeFile(wb, 'Vehiculos.xlsx')
     }
 
-    const deleteMarca = async (id) => {
+    const deleteModelo = async (id) => {
         await axios.delete(`${URI}/del/${id}`, config)
-        getMarca();
+        getModelo();
     }
 
-    const updateMarca = async (newData) => {
+    const updateModelo = async (newData) => {
         //console.log('Entra en update');
         //console.log(newData)
-        await axios.put(URI + "put/" + newData.idmarca, newData, config
+        await axios.put(URI + "/put/" + newData.idmodelo, newData, config
         );
-        getMarca();
+        getModelo();
     }
+
 
     const columns = [
         {
             title: 'id',
-            dataIndex: 'idmarca',
-            width: '5%',
+            dataIndex: 'iddet_modelo',
+            //width: '5%',
             editable: false,
-            ...getColumnSearchProps('idmarca'),
+            ...getColumnSearchProps('iddetmodelo'),
         },
         {
-            title: 'Descripcion',
-            dataIndex: 'descripcion',
+            title: 'Modelo',
+            dataIndex: 'idmodelo',
+            //width: '12%',
+            editable: true,
+            render: (_, { modelo }) => {
+                return (
+                    modelo.descripcion
+                );
+            },
+        },
+        {
+            title: 'Marca',
+            dataIndex: 'idmarca',
+            //width: '15%',
+            editable: true,
+            render: (_, { marca }) => {
+                return (
+                    marca.descripcion
+                );
+            },
+            //...getColumnSearchProps('proveedor'),
+        },
+        {
+            title: 'Detalle',
+            dataIndex: 'detalle',
             //width: '22%',
             editable: true,
             ...getColumnSearchProps('descripcion'),
         },
         {
+            title: 'Costo',
+            dataIndex: 'costo',
+            //width: '12%',
+            editable: true,
+        },
+        {
+            title: 'Chasis',
+            dataIndex: 'chasis',
+            //width: '12%',
+            editable: true,
+        },
+        {
+            title: 'Año',
+            dataIndex: 'anho',
+            //width: '12%',
+            editable: true,
+        },
+        {
+            title: 'Matricula',
+            dataIndex: 'matricula',
+            //width: '12%',
+            editable: true,
+        },
+        {
+            title: 'Color',
+            dataIndex: 'color',
+            //width: '12%',
+            editable: true,
+        },
+        {
+            title: 'Imagen',
+            dataIndex: 'img',
+            //width: '8%',
+            editable: true,
+            render: (_, { img }) => {
+                if (img && typeof img !== "string") {
+                    //console.log(typeof img);
+                    const asciiTraducido = Buffer.from(img.data).toString('ascii');
+                    //console.log(asciiTraducido);
+                    if (asciiTraducido) {
+                        return (
+                            <Image
+                                style={{ border: `1px solid gray`, borderRadius: `4px` }}
+                                alt="imagen"
+                                //preview={false}
+                                //style={{ width: '50%',margin:`0px`,textAlign:`center` }}
+                                src={asciiTraducido}
+                            />
+                        );
+                    } else {
+                        return null
+                    }
+                } else {
+                    return null
+                }
+            },
+        },
+        {
+            title: 'Imagen',
+            dataIndex: 'img1',
+            //width: '8%',
+            editable: true,
+            render: (_, { img1 }) => {
+                if (img1 && typeof img1 !== "string") {
+                    //console.log(typeof img);
+                    const asciiTraducido = Buffer.from(img1.data).toString('ascii');
+                    //console.log(asciiTraducido);
+                    if (asciiTraducido) {
+                        return (
+                            <Image
+                                style={{ border: `1px solid gray`, borderRadius: `4px` }}
+                                alt="imagen"
+                                //preview={false}
+                                //style={{ width: '50%',margin:`0px`,textAlign:`center` }}
+                                src={asciiTraducido}
+                            />
+                        );
+                    } else {
+                        return null
+                    }
+                } else {
+                    return null
+                }
+            },
+        },
+        {
+            title: 'Imagen',
+            dataIndex: 'img2',
+            //width: '8%',
+            editable: true,
+            render: (_, { img2 }) => {
+                if (img2 && typeof img2 !== "string") {
+                    //console.log(typeof img);
+                    const asciiTraducido = Buffer.from(img2.data).toString('ascii');
+                    //console.log(asciiTraducido);
+                    if (asciiTraducido) {
+                        return (
+                            <Image
+                                style={{ border: `1px solid gray`, borderRadius: `4px` }}
+                                alt="imagen"
+                                //preview={false}
+                                //style={{ width: '50%',margin:`0px`,textAlign:`center` }}
+                                src={asciiTraducido}
+                            />
+                        );
+                    } else {
+                        return null
+                    }
+                } else {
+                    return null
+                }
+            },
+        },
+        {
+            title: 'Proveedor',
+            dataIndex: 'idproveedor',
+            //width: '15%',
+            editable: true,
+            render: (_, { proveedor }) => {
+                return (
+                    proveedor.razon_social
+                );
+            },
+            //...getColumnSearchProps('proveedor'),
+        },
+        {
+            title: 'Ruc proveedor',
+            dataIndex: 'ruc',
+            //width: '12%',
+            editable: false,
+            render: (_, { proveedor }) => {
+                return (
+                    proveedor.ruc
+                );
+            },
+            //...getColumnSearchProps('proveedor'),
+        },
+        {
             title: 'Estado',
             dataIndex: 'estado',
-            //width: '7%',
+            //width: '10%',
             editable: true,
-            render: (_, { estado, idmarca }) => {
+            render: (_, { estado, idmodelo }) => {
                 let color = 'black';
                 if (estado.toUpperCase() === 'AC') { color = 'green' }
                 else { color = 'volcano'; }
                 return (
-                    <Tag color={color} key={idmarca} >
+                    <Tag color={color} key={idmodelo} >
                         {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
                     </Tag>
                 );
@@ -202,13 +363,11 @@ const ListaMarca = ({ token }) => {
             title: 'Accion',
             dataIndex: 'operacion',
             render: (_, record) => {
-
                 const editable = isEditing(record);
-
                 return editable ? (
                     <span>
                         <Typography.Link
-                            onClick={() => save(record.idmarca)}
+                            onClick={() => save(record.idmodelo, record)}
                             style={{
                                 marginRight: 8,
                             }} >
@@ -221,14 +380,13 @@ const ListaMarca = ({ token }) => {
                     </span>
                 ) : (
                     <>
-
                         <Typography.Link style={{ margin: `5px` }} disabled={editingKey !== ''} onClick={() => edit(record)}>
                             Editar
                         </Typography.Link>
 
                         <Popconfirm
                             title="Desea eliminar este registro?"
-                            onConfirm={() => confirmDel(record.idmarca)}
+                            onConfirm={() => confirmDel(record.idmodelo)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No" >
@@ -236,7 +394,6 @@ const ListaMarca = ({ token }) => {
                                 Borrar
                             </Typography.Link>
                         </Popconfirm>
-
                     </>
                 );
             },
@@ -247,42 +404,51 @@ const ListaMarca = ({ token }) => {
         form.setFieldsValue({
             ...record,
         });
-        setEditingKey(record.idmarca);
+        setEditingKey(record.idmodelo);
     };
 
 
-    const isEditing = (record) => record.idmarca === editingKey;
+    const isEditing = (record) => record.idmodelo === editingKey;
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const confirmDel = (idmarca) => {
+    const confirmDel = (idmodelo) => {
         message.success('Procesando');
-        deleteMarca(idmarca);
+        deleteModelo(idmodelo);
     };
 
-    const save = async (idmarca) => {
+    const save = async (idmodelo, record) => {
 
         try {
             const row = await form.validateFields();
             const newData = [...data];
-            const index = newData.findIndex((item) => idmarca === item.idmarca);
+            const index = newData.findIndex((item) => idmodelo === item.idmodelo);
 
             if (index > -1) {
-
                 const item = newData[index];
+                //console.log(newData);
+
                 newData.splice(index, 1, {
                     ...item,
                     ...row,
                 });
 
+                if (record.idmodelo === item.idmodelo) {
+                    //console.log('Entra en asignacion',record.img);
+                    newData[index].img = record.img;
+                    newData[index].img1 = record.img1;
+                    newData[index].img2 = record.img2;
+                }
+
                 newData[index].fecha_upd = strFecha;
+
                 //console.log(newData);
-                updateMarca(newData[index]);
+
+                updateModelo(newData[index]);
                 setData(newData);
                 setEditingKey('');
-
                 message.success('Registro actualizado');
             } else {
                 newData.push(row);
@@ -314,15 +480,17 @@ const ListaMarca = ({ token }) => {
 
     return (
         <>
-            <h3>Marcas</h3>
+            <h3>Playa disponible</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
             <Button type='primary' style={{ backgroundColor: `#E94325`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>
-
-                <Button type="primary" onClick={() => navigate('/crearmarca')} >{<PlusOutlined />} Nuevo</Button>
+                <Button className='success' onClick={() => navigate('/detmodelototal')} >Total</Button>
             </div>
-            <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idmarca'} />
+            <div style={{ marginBottom: `5px`, textAlign: `end` }}>
+                <Button type="primary" onClick={() => navigate('/creardetmodelo')} >{<PlusOutlined />} Nuevo</Button>
+            </div>
+            <TableModel token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idmodelo'} />
         </>
     )
 }
-export default ListaMarca
+export default ListaDetModelo
