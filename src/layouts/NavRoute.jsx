@@ -10,16 +10,16 @@ import NuevaVenta from '../components/Venta/NuevaVenta';
 import AppBar from './AppBar';
 import TableFormat from '../components/TableModel/Table';
 import NuevoProveedor from '../components/Proveedor/NuevoProveedor';
-import ListaCliente from '../components/Cliente/ListaCliente';
-import NuevoCliente from '../components/Cliente/NuevoCliente';
+import ListaInscripcion from '../components/Inscripcion/ListaInscripcion';
+import NuevoInscripcion from '../components/Inscripcion/NuevoInscripcion';
 import ListaCiudad from '../components/Ciudad/ListaCiudad';
 import NuevoCiudad from '../components/Ciudad/NuevoCiudad';
-import ListaMarca from '../components/Marca/ListaMarca';
-import NuevoMarca from '../components/Marca/NuevoMarca';
 import ReportePlaya from '../components/Reportes/ReportePlaya';
-import ListaModelo from '../components/Modelo/ListaModelo';
-import NuevoModelo from '../components/Modelo/NuevoModelo';
+import ListaContrato from '../components/Contrato/ListaContrato';
+import NuevoContrato from '../components/Contrato/NuevoContrato';
 import Informes from '../components/Reportes/Informes';
+import ListaTurno from '../components/Turno/ListaTurno';
+import NuevoTurno from '../components/Turno/NuevoTurno';
 
 function NavRoute({ usuario }) {
   return (
@@ -44,11 +44,11 @@ function NavRoute({ usuario }) {
                   <Route path='/ciudad' element={<ListaCiudad token={usuario.token} />} />
                   <Route path='/crearciudad' element={<NuevoCiudad token={usuario.token} />} />
                   #Modelo
-                  <Route path='/modelo' element={<ListaModelo token={usuario.token} />} />
-                  <Route path='/crearmodelo' element={<NuevoModelo token={usuario.token} />} />
-                  #Marca
-                  <Route path='/marca' element={<ListaMarca token={usuario.token} />} />
-                  <Route path='/crearmarca' element={<NuevoMarca token={usuario.token} />} />
+                  <Route path='/instructor' element={<ListaContrato token={usuario.token} />} />
+                  <Route path='/crearcontrato' element={<NuevoContrato token={usuario.token} />} />
+                  #Turno
+                  <Route path='/turno' element={<ListaTurno token={usuario.token} />} />
+                  <Route path='/crearturno' element={<NuevoTurno token={usuario.token} />} />
 
                   #ReportePlaya
                   <Route path='/repomodelos' element={<ReportePlaya token={usuario.token} />} />
@@ -61,9 +61,9 @@ function NavRoute({ usuario }) {
                 : null
             }
             
-            #Cliente
-            <Route path='/cliente' element={<ListaCliente token={usuario.token} />} />
-            <Route path='/crearcliente' element={<NuevoCliente token={usuario.token} />} />
+            #Inscripcion
+            <Route path='/inscripcion' element={<ListaInscripcion token={usuario.token} />} />
+            <Route path='/crearinscripcion' element={<NuevoInscripcion token={usuario.token} />} />
             
             <Route path='*' element={<Navigate replace to='/' />} />
             #Venta

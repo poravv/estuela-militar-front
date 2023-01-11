@@ -7,8 +7,8 @@ import React from 'react';
 import { Button, Form, Input } from 'antd';
 
 
-const URI = 'http://186.158.152.141:3002/automot/api/marca';
-function NuevoMarca({ token }) {
+const URI = 'http://186.158.152.141:3002/automot/api/contrato/';
+function NuevoContrato({ token }) {
 
     //Parte de nuevo registro por modal
     const [descripcion, setDescripcion] = useState('')
@@ -23,24 +23,24 @@ function NuevoMarca({ token }) {
     //procedimiento para actualizar
     const create = async (e) => {
         //e.preventDefault();
-        await axios.post(URI + "/post/", {
+        await axios.post(URI + "post/", {
             descripcion: descripcion,
             estado: "AC"
         }, config
         );
-        navigate('/marca');
+        navigate('/contrato');
     }
 
     const btnCancelar = (e) => {
         e.preventDefault();
-        navigate('/marca');
+        navigate('/contrato');
     }
 
 
     return (
         <div >
             <div style={{ marginBottom:`20px` }}>
-                <h2>Nueva marca</h2>
+                <h2>Nueva contrato</h2>
             </div>
             <Form
                 name="basic"
@@ -50,10 +50,8 @@ function NuevoMarca({ token }) {
                 initialValues={{ remember: true, }}
                 onFinish={create}
                 //onFinishFailed={create}
-                autoComplete="off"
-            >
-
-                <Form.Item name="descripcion" rules={[{ required: true, message: 'Cargue marca', },]}>
+                autoComplete="off">
+                <Form.Item name="descripcion" rules={[{ required: true, message: 'Cargue contrato', },]}>
                     <Input placeholder='Descripcion' value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
                 </Form.Item>
                 <Form.Item
@@ -70,7 +68,7 @@ function NuevoMarca({ token }) {
     );
 }
 
-export default NuevoMarca;
+export default NuevoContrato;
 
 /*
 

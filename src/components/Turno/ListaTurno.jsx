@@ -16,23 +16,15 @@ import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
 const data = [
-    {idciudad:1,descripcion:'Capiata',estado:'AC'},
-    {idciudad:2,descripcion:'Lambare',estado:'AC'},
-    {idciudad:3,descripcion:'Luque',estado:'IN'},
-    {idciudad:4,descripcion:'Itaugua',estado:'AC'},
-    {idciudad:5,descripcion:'Asuncion',estado:'AC'},
-    {idciudad:6,descripcion:'San Lorenzo',estado:'IN'},
-    {idciudad:7,descripcion:'Prueba',estado:'AC'},
-    {idciudad:8,descripcion:'Prueba',estado:'AC'},
-    {idciudad:9,descripcion:'Prueba',estado:'AC'},
-    {idciudad:10,descripcion:'Prueba',estado:'AC'},
-    {idciudad:11,descripcion:'Prueba',estado:'AC'},
+    {idturno:1,descripcion:'Mañana',estado:'AC'},
+    {idturno:2,descripcion:'Tarde',estado:'AC'},
+    {idturno:3,descripcion:'Noche',estado:'IN'},
 ]
 
-//const URI = 'http://186.158.152.141:3002/automot/api/ciudad/';
+//const URI = 'http://186.158.152.141:3002/automot/api/turno/';
 //let fechaActual = new Date();
-const ListaCiudad = ({ token }) => {
-    console.log('entra en ciudad')
+const ListaTurno = ({ token }) => {
+    console.log('entra en turno')
     const [form] = Form.useForm();
     //const [data, setData] = useState([]);
 
@@ -48,7 +40,7 @@ const ListaCiudad = ({ token }) => {
 
     /*
     useEffect(() => {
-        getCiudad();
+        getTurno();
         // eslint-disable-next-line
     }, []);
 
@@ -59,7 +51,7 @@ const ListaCiudad = ({ token }) => {
         }
     };
 
-    const getCiudad = async () => {
+    const getTurno = async () => {
         const res = await axios.get(`${URI}/get`, config)
         /*En caso de que de error en el server direcciona a login* /
         if (res.data.error) {
@@ -69,7 +61,7 @@ const ListaCiudad = ({ token }) => {
         const resDataId = [];
 
         res.data.body.map((rs) => {
-            rs.key = rs.idciudad;
+            rs.key = rs.idturno;
             resDataId.push(rs);
             return true;
         })
@@ -173,36 +165,34 @@ const ListaCiudad = ({ token }) => {
             ),
     });
 
-
-
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Ciudades');
-        XLSX.writeFile(wb, 'Ciudades.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'Turno');
+        XLSX.writeFile(wb, 'Turno.xlsx')
     }
 
-    const deleteCiudad = async (id) => {
+    const deleteTurno = async (id) => {
         //await axios.delete(`${URI}/del/${id}`, config)
-        //getCiudad();
+        //getTurno();
     }
 // eslint-disable-next-line
-    const updateCiudad = async (newData) => {
+    const updateTurno = async (newData) => {
         //console.log('Entra en update');
         //console.log(newData)
         
         /*
-        await axios.put(URI + "put/" + newData.idciudad, newData, config
+        await axios.put(URI + "put/" + newData.idturno, newData, config
         );
-        getCiudad();*/
+        getTurno();*/
     }
 
     const columns = [
         {
             title: 'id',
-            dataIndex: 'idciudad',
+            dataIndex: 'idturno',
             width: '5%',
             editable: false,
-            ...getColumnSearchProps('idciudad'),
+            ...getColumnSearchProps('idturno'),
         },
         {
             title: 'Descripcion',
@@ -216,12 +206,12 @@ const ListaCiudad = ({ token }) => {
             dataIndex: 'estado',
             //width: '7%',
             editable: true,
-            render: (_, { estado, idciudad }) => {
+            render: (_, { estado, idturno }) => {
                 let color = 'black';
                 if (estado.toUpperCase() === 'AC') { color = 'green' }
                 else { color = 'volcano'; }
                 return (
-                    <Tag color={color} key={idciudad} >
+                    <Tag color={color} key={idturno} >
                         {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
                     </Tag>
                 );
@@ -237,7 +227,7 @@ const ListaCiudad = ({ token }) => {
                 return editable ? (
                     <span>
                         <Typography.Link
-                            onClick={() => save(record.idciudad)}
+                            onClick={() => save(record.idturno)}
                             style={{
                                 marginRight: 8,
                             }} >
@@ -257,7 +247,7 @@ const ListaCiudad = ({ token }) => {
 
                         <Popconfirm
                             title="Desea eliminar este registro?"
-                            onConfirm={() => confirmDel(record.idciudad)}
+                            onConfirm={() => confirmDel(record.idturno)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No" >
@@ -276,28 +266,28 @@ const ListaCiudad = ({ token }) => {
         form.setFieldsValue({
             ...record,
         });
-        setEditingKey(record.idciudad);
+        setEditingKey(record.idturno);
     };
 
 
-    const isEditing = (record) => record.idciudad === editingKey;
+    const isEditing = (record) => record.idturno === editingKey;
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const confirmDel = (idciudad) => {
+    const confirmDel = (idturno) => {
         message.success('Procesando');
-        deleteCiudad(idciudad);
+        deleteTurno(idturno);
     };
 
-    const save = async (idciudad) => {
+    const save = async (idturno) => {
 /*
 
         try {
             const row = await form.validateFields();
             const newData = [...data];
-            const index = newData.findIndex((item) => idciudad === item.idciudad);
+            const index = newData.findIndex((item) => idturno === item.idturno);
 
             if (index > -1) {
 
@@ -309,7 +299,7 @@ const ListaCiudad = ({ token }) => {
 
                 newData[index].fecha_upd = strFecha;
                 //console.log(newData);
-                updateCiudad(newData[index]);
+                updateTurno(newData[index]);
                 setData(newData);
                 setEditingKey('');
 
@@ -344,15 +334,15 @@ const ListaCiudad = ({ token }) => {
 
     return (
         <>
-            <h3>Ciudades</h3>
+            <h3>Turno</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
             <Button type='primary' style={{ backgroundColor: `#E94325`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>
 
-                <Button type="primary" onClick={() => navigate('/crearciudad')} >{<PlusOutlined />} Nuevo</Button>
+                <Button type="primary" onClick={() => navigate('/crearturno')} >{<PlusOutlined />} Nuevo</Button>
             </div>
-            <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idciudad'} />
+            <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idturno'} />
         </>
     )
 }
-export default ListaCiudad
+export default ListaTurno

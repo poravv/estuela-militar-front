@@ -7,8 +7,8 @@ import React from 'react';
 import { Button, Form, Input } from 'antd';
 
 
-const URI = 'http://186.158.152.141:3002/automot/api/modelo/';
-function NuevoModelo({ token }) {
+const URI = 'http://186.158.152.141:3002/automot/api/turno/';
+function NuevoTurno({ token }) {
 
     //Parte de nuevo registro por modal
     const [descripcion, setDescripcion] = useState('')
@@ -28,19 +28,19 @@ function NuevoModelo({ token }) {
             estado: "AC"
         }, config
         );
-        navigate('/modelo');
+        navigate('/turno');
     }
 
     const btnCancelar = (e) => {
         e.preventDefault();
-        navigate('/modelo');
+        navigate('/turno');
     }
 
 
     return (
         <div >
             <div style={{ marginBottom:`20px` }}>
-                <h2>Nueva modelo</h2>
+                <h2>Nuevo turno</h2>
             </div>
             <Form
                 name="basic"
@@ -53,7 +53,7 @@ function NuevoModelo({ token }) {
                 autoComplete="off"
             >
 
-                <Form.Item name="descripcion" rules={[{ required: true, message: 'Cargue modelo', },]}>
+                <Form.Item name="descripcion" rules={[{ required: true, message: 'Cargue turno', },]}>
                     <Input placeholder='Descripcion' value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
                 </Form.Item>
                 <Form.Item
@@ -70,10 +70,4 @@ function NuevoModelo({ token }) {
     );
 }
 
-export default NuevoModelo;
-
-/*
-
-                
-
-*/
+export default NuevoTurno;

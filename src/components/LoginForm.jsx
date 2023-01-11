@@ -1,24 +1,26 @@
 
 import { useState } from 'react';
 import '../CSS/LoginForm.css'
-import LoginServices from '../services/Login'
+//import LoginServices from '../services/Login'
 import '../CSS/Cuerpo.css'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Layout, Typography, message } from 'antd';
+import { Button, Form, Input, Layout, Typography, 
+//    message 
+} from 'antd';
 
 //const { Text } = Typography;
 const { Content } = Layout;
 
 function LoginForm() {
+    console.log('Entra a login form')
     //poravv-andres
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
-    const [user, setUser] = useState(null);
-
+    //const [user, setUser] = useState(null);
+    console.log(username,password)
     const handleLoginSubmit = async () => {
-        //event.preventDefault();
-        //console.log('Presionado el submit');
-        try {
+
+        /*try {
             const usuarioRes = await LoginServices({
                 nick: username,
                 password: password
@@ -37,7 +39,23 @@ function LoginForm() {
         } catch (e) {
             //console.log(e);
             message.warning('Error de usuario o contraseña');
-        }
+        }*/
+        const usuarioRes = {
+            body: {
+                nick: 'admin',
+                password: 'admin',
+                name:'admin',
+                nombre:'admin',
+                apellido:'admin',
+                nivel:1,
+                estado:'AC'
+            }
+        };
+        window.localStorage.setItem(
+            'loggedSiswebUser', JSON.stringify(usuarioRes)
+        );
+        // eslint-disable-next-line
+        window.location.href = window.location.href;
     }
 
     return (

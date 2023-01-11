@@ -223,8 +223,8 @@ case 'img1':
             columns={mergedColumns}
             rowClassName="editable-row"
             scroll={{
-              x: 'calc(800px + 100%)',
-              y: 1500,
+              x: 'calc(600px + 80%)',
+              y: 300,
             }}
 
           //pagination={{onChange: setCantidadRow,pageSize: 50,}}

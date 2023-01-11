@@ -1,11 +1,13 @@
-import axios from 'axios'
-import { useState, useEffect, useRef } from 'react'
+//import axios from 'axios'
+import { useState, 
+    //useEffect, 
+    useRef } from 'react'
 //import { Logout } from '../Utils/Logout';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import { Popconfirm, Typography } from 'antd';
 import { Form } from 'antd';
 import TableModel from '../TableModel/TableModel';
-import { Tag } from 'antd';
+//import { Tag } from 'antd';
 import { message } from 'antd';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
@@ -13,16 +15,36 @@ import Highlighter from 'react-highlight-words';
 import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
+const data = [
+    {idinstructor:1,grado:'Cap',nombre:'Andres',apellido: 'Vera',edad:'32',sexo:'MA',materia:'FUNDAMENTOS DEL EMPLEO DEL PODER NAVAL'},
+{idinstructor:2,grado:'Tte',nombre:'Alcides',apellido: 'Lopez',edad:'35',sexo:'MA',materia:'MATEMATICA'},
+{idinstructor:3,grado:'Cap',nombre:'Raul',apellido: 'Ortega',edad:'29',sexo:'MA',materia:'EDUCACION FISICA'},
+{idinstructor:4,grado:'Tte',nombre:'Arturo',apellido: 'Viera',edad:'32',sexo:'MA',materia:'FISICA AVANZADA'},
+{idinstructor:5,grado:'Cap',nombre:'Enrique',apellido: 'Torres',edad:'27',sexo:'MA',materia:'FUNDAMENTOS DEL EMPLEO DEL PODER NAVAL'},
+{idinstructor:6,grado:'Tte',nombre:'Salomon',apellido: 'Fernandez',edad:'28',sexo:'MA',materia:'MATEMATICA'},
+{idinstructor:7,grado:'Cap',nombre:'Hugo',apellido: 'Perez',edad:'28',sexo:'MA',materia:'EDUCACION FISICA'},
+{idinstructor:8,grado:'Tte',nombre:'Hector',apellido: 'Aguilar',edad:'27',sexo:'MA',materia:'FISICA AVANZADA'},
+{idinstructor:9,grado:'Cap',nombre:'Cesar',apellido: 'Gavilan',edad:'33',sexo:'MA',materia:'FUNDAMENTOS DEL EMPLEO DEL PODER NAVAL'},
+{idinstructor:10,grado:'Tte',nombre:'David',apellido: 'Vera',edad:'34',sexo:'MA',materia:'MATEMATICA'},
+{idinstructor:11,grado:'Cap',nombre:'Francisco',apellido: 'Chavez',edad:'22',sexo:'MA',materia:'EDUCACION FISICA'},
+{idinstructor:12,grado:'Tte',nombre:'Alejandro',apellido: 'Villasboa',edad:'34',sexo:'MA',materia:'FISICA AVANZADA'},
+{idinstructor:13,grado:'Cap',nombre:'Isaias',apellido: 'Torres',edad:'28',sexo:'MA',materia:'FUNDAMENTOS DEL EMPLEO DEL PODER NAVAL'},
+{idinstructor:14,grado:'Tte',nombre:'Raquel',apellido: 'Lovera',edad:'40',sexo:'FE',materia:'MATEMATICA'},
+{idinstructor:15,grado:'Cap',nombre:'Angelica',apellido: 'Franco',edad:'42',sexo:'FE',materia:'EDUCACION FISICA'},
+{idinstructor:16,grado:'Tte',nombre:'Luz',apellido: 'Almeida',edad:'29',sexo:'FE',materia:'FISICA AVANZADA'},
+{idinstructor:17,grado:'Cap',nombre:'Aleli',apellido: 'Vera',edad:'32',sexo:'FE',materia:'FUNDAMENTOS DEL EMPLEO DEL PODER NAVAL'},
+{idinstructor:18,grado:'Tte',nombre:'Claudia',apellido: 'Rotela',edad:'41',sexo:'FE',materia:'MATEMATICA'},
+]
 
-const URI = 'http://186.158.152.141:3002/automot/api/modelo/';
-
-const ListaModelo = ({ token }) => {
-
+//const URI = 'http://186.158.152.141:3002/automot/api/contrato/';
+//let fechaActual = new Date();
+const ListaContrato = ({ token }) => {
+    console.log('entra en contrato')
     const [form] = Form.useForm();
-    const [data, setData] = useState([]);
+    //const [data, setData] = useState([]);
 
     const [editingKey, setEditingKey] = useState('');
-    
+    //const strFecha = fechaActual.getFullYear() + "-" + (fechaActual.getMonth() + 1) + "-" + fechaActual.getDate();
     //---------------------------------------------------
     //Datos de buscador
     const [searchText, setSearchText] = useState('');
@@ -31,8 +53,9 @@ const ListaModelo = ({ token }) => {
     const navigate = useNavigate();
     //---------------------------------------------------
 
+    /*
     useEffect(() => {
-        getModelo();
+        getContrato();
         // eslint-disable-next-line
     }, []);
 
@@ -43,11 +66,25 @@ const ListaModelo = ({ token }) => {
         }
     };
 
-    const getModelo = async () => {
+    const getContrato = async () => {
         const res = await axios.get(`${URI}/get`, config)
-        //console.log(res.data.body);
+        /*En caso de que de error en el server direcciona a login* /
+        if (res.data.error) {
+            Logout();
+        }
+        /*
+        const resDataId = [];
+
+        res.data.body.map((rs) => {
+            rs.key = rs.idinstructor;
+            resDataId.push(rs);
+            return true;
+        })
+        setData(resDataId);
+        * /
         setData(res.data.body);
     }
+    */
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -147,53 +184,90 @@ const ListaModelo = ({ token }) => {
 
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Modelos');
-        XLSX.writeFile(wb, 'Modelos.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'Contratos');
+        XLSX.writeFile(wb, 'Contratos.xlsx')
     }
 
-    const deleteModelo = async (id) => {
-        await axios.delete(`${URI}/del/${id}`, config)
-        getModelo();
+    const deleteContrato = async (id) => {
+        //await axios.delete(`${URI}/del/${id}`, config)
+        //getContrato();
     }
-
-    const updateModelo = async (newData) => {
+// eslint-disable-next-line
+    const updateContrato = async (newData) => {
         //console.log('Entra en update');
         //console.log(newData)
-        await axios.put(URI + "put/" + newData.idmodelo, newData, config
+        
+        /*
+        await axios.put(URI + "put/" + newData.idinstructor, newData, config
         );
-        getModelo();
+        getContrato();*/
     }
 
     const columns = [
         {
             title: 'id',
-            dataIndex: 'idmodelo',
+            dataIndex: 'idinstructor',
             width: '5%',
             editable: false,
-            ...getColumnSearchProps('idmodelo'),
+            ...getColumnSearchProps('idinstructor'),
         },
         {
-            title: 'Descripcion',
-            dataIndex: 'descripcion',
+            title: 'Grado',
+            dataIndex: 'grado',
             //width: '22%',
             editable: true,
-            ...getColumnSearchProps('descripcion'),
+            ...getColumnSearchProps('grado'),
         },
         {
+            title: 'Nombre',
+            dataIndex: 'nombre',
+            //width: '22%',
+            editable: true,
+            ...getColumnSearchProps('nombre'),
+        },
+        {
+            title: 'Apellido',
+            dataIndex: 'apellido',
+            //width: '22%',
+            editable: true,
+            ...getColumnSearchProps('apellido'),
+        },
+       /* {
             title: 'Estado',
             dataIndex: 'estado',
             //width: '7%',
             editable: true,
-            render: (_, { estado, idmodelo }) => {
+            render: (_, { estado, idinstructor }) => {
                 let color = 'black';
                 if (estado.toUpperCase() === 'AC') { color = 'green' }
                 else { color = 'volcano'; }
                 return (
-                    <Tag color={color} key={idmodelo} >
+                    <Tag color={color} key={idinstructor} >
                         {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
                     </Tag>
                 );
             },
+        },*/
+        {
+            title: 'Edad',
+            dataIndex: 'edad',
+            //width: '22%',
+            editable: true,
+            ...getColumnSearchProps('edad'),
+        },
+        {
+            title: 'Sexo',
+            dataIndex: 'sexo',
+            //width: '22%',
+            editable: true,
+            ...getColumnSearchProps('nombre'),
+        },
+        {
+            title: 'Materia',
+            dataIndex: 'materia',
+            //width: '22%',
+            editable: true,
+            ...getColumnSearchProps('materia'),
         },
         {
             title: 'Accion',
@@ -205,7 +279,7 @@ const ListaModelo = ({ token }) => {
                 return editable ? (
                     <span>
                         <Typography.Link
-                            onClick={() => save(record.idmodelo)}
+                            onClick={() => save(record.idinstructor)}
                             style={{
                                 marginRight: 8,
                             }} >
@@ -225,7 +299,7 @@ const ListaModelo = ({ token }) => {
 
                         <Popconfirm
                             title="Desea eliminar este registro?"
-                            onConfirm={() => confirmDel(record.idmodelo)}
+                            onConfirm={() => confirmDel(record.idinstructor)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No" >
@@ -244,27 +318,28 @@ const ListaModelo = ({ token }) => {
         form.setFieldsValue({
             ...record,
         });
-        setEditingKey(record.idmodelo);
+        setEditingKey(record.idinstructor);
     };
 
 
-    const isEditing = (record) => record.idmodelo === editingKey;
+    const isEditing = (record) => record.idinstructor === editingKey;
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const confirmDel = (idmodelo) => {
+    const confirmDel = (idinstructor) => {
         message.success('Procesando');
-        deleteModelo(idmodelo);
+        deleteContrato(idinstructor);
     };
 
-    const save = async (idmodelo) => {
+    const save = async (idinstructor) => {
+/*
 
         try {
             const row = await form.validateFields();
             const newData = [...data];
-            const index = newData.findIndex((item) => idmodelo === item.idmodelo);
+            const index = newData.findIndex((item) => idinstructor === item.idinstructor);
 
             if (index > -1) {
 
@@ -273,8 +348,10 @@ const ListaModelo = ({ token }) => {
                     ...item,
                     ...row,
                 });
+
+                newData[index].fecha_upd = strFecha;
                 //console.log(newData);
-                updateModelo(newData[index]);
+                updateContrato(newData[index]);
                 setData(newData);
                 setEditingKey('');
 
@@ -286,7 +363,7 @@ const ListaModelo = ({ token }) => {
             }
         } catch (errInfo) {
             console.log('Validate Failed:', errInfo);
-        }
+        }*/
     };
 
 
@@ -309,14 +386,15 @@ const ListaModelo = ({ token }) => {
 
     return (
         <>
-            <h3>Modelos</h3>
+            <h3>Instructores</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
             <Button type='primary' style={{ backgroundColor: `#E94325`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>
-                <Button type="primary" onClick={() => navigate('/crearmodelo')} >{<PlusOutlined />} Nuevo</Button>
+
+                <Button type="primary" onClick={() => navigate('/crearcontrato')} >{<PlusOutlined />} Nuevo</Button>
             </div>
-            <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idmodelo'} />
+            <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idinstructor'} />
         </>
     )
 }
-export default ListaModelo;
+export default ListaContrato

@@ -9,7 +9,7 @@ const URIVENTA = 'http://186.158.152.141:3002/automot/api/venta';
 const ReportePlaya = ({ token }) => {
 
     //console.log(token)
-    const [mma, setMma] = useState([]);
+    //const [mma, setMma] = useState([]);
     const [marca, setMarca] = useState([]);
     const [modelo, setModelo] = useState([]);
     const [ventamarca, setVentamarca] = useState([]);
@@ -31,18 +31,18 @@ const ReportePlaya = ({ token }) => {
     const getEstadistica = async () => {
         const res = await axios.get(`${URIMODELO}/getestadistica/`, configToken)
         console.log(res.data.body);
-        let mma = [];
+        //let mma = [];
         let marca = [];
         let modelo = [];
         res.data.body.map((valor) => {
-            if (valor.obs === 'mma') mma.push(valor)
+            //if (valor.obs === 'mma') mma.push(valor)
             if (valor.obs === 'marca') marca.push(valor)
             if (valor.obs === 'modelo') modelo.push(valor)
             return true;
         })
         setMarca(marca);
         setModelo(modelo);
-        setMma(mma);
+        //setMma(mma);
     }
 
     const getEstadisticaVenta = async () => {

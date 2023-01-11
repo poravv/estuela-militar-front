@@ -6,11 +6,12 @@ import {
     TeamOutlined,
     ToolOutlined,
     LogoutOutlined,
-    PieChartOutlined
+    PieChartOutlined,
+    FolderOpenOutlined
 } from '@ant-design/icons';
 import { Layout, Menu,Image } from 'antd';
 import { Outlet } from 'react-router-dom';
-import logo from '../auto.webp';
+import logo from '../logoprueba.png';
 import { useNavigate } from "react-router-dom";
 import { Logout } from '../components/Utils/Logout';
 
@@ -42,25 +43,23 @@ const AppBar = ({ usuario }) => {
     const items = [
         getItem(() => navegacion('/'), 'Home', '1', <HomeOutlined />),
         //getItem(() => navegacion('/tablemodel'), 'Option 2', '2', <DesktopOutlined />),
-        getItem(null, 'Configuracion', 'sub1', <ToolOutlined />, [
+        getItem(null, 'Mantenimiento', 'sub1', <ToolOutlined />, [
             getItem(() => navegacion('/ciudad'), 'Ciudad', '2'),
-            getItem(() => navegacion('/marca'), 'Marca', '3'),
-            getItem(() => navegacion('/modelo'), 'Modelo', '4'),
-            getItem(() => navegacion('/proveedor'), 'Proveedor', '5'),
-            getItem(() => navegacion('/detmodelo'), 'Playa', '6'),
+            getItem(() => navegacion('/turno'), 'Turno', '3'),
         ]),
-        getItem(null, 'Movimiento', 'sub2', <TeamOutlined />, [
-            getItem(() => navegacion('/cliente'), 'Clientes', '7'),
+        getItem(null, 'Administrativo', 'sub2', <TeamOutlined />, [
+            getItem(() => navegacion('/instructor'), 'Instructores', '4'),
+        ]),
+        getItem(null, 'Academico', 'sub3', <FolderOpenOutlined />, [
+            getItem(() => navegacion('/inscripcion'), 'Inscripcion', '7'),
             getItem(() => navegacion('/venta'), 'Pedido venta', '8')
         ]),
-        getItem(null, 'Reportes', 'sub3', <PieChartOutlined />, [
+        getItem(null, 'Reportes', 'sub4', <PieChartOutlined />, [
             getItem(() => navegacion('/repomodelos'), 'Estadisticas', '9'),
             getItem(() => navegacion('/informes'), 'Informes', '10'),
         ]),
         getItem(() => Logout(), 'Close session', '11', <LogoutOutlined />)
     ];
-
-
     return (
         <Layout hasSider
             style={{
@@ -73,8 +72,8 @@ const AppBar = ({ usuario }) => {
                 collapsed={collapsed} 
                 onCollapse={(value) => setCollapsed(value)}
             >
-                <div className="logo" style={{ margin:`10px` }} >
-                    <Image src={logo} alt={'logo'} preview={false} />
+                <div className="logo" style={{ margin:`10px`,display:`flex`,alignItems:`center`,justifyContent:`center`,textAlign:`center` }} >
+                    <Image style={{maxHeight:`120px` }} src={logo} alt={'logo'} preview={false} />
                 </div>
                 {
                     <Menu theme='dark' defaultSelectedKeys={['1']} mode="inline" items={items} />
@@ -99,7 +98,7 @@ const AppBar = ({ usuario }) => {
                 </Content>
 
                 <Footer style={{ textAlign: 'center' }} >
-                    ©2022 Created by Andrés Vera
+                    ©2022 Created by Lic. Andrés Vera
                 </Footer>
             </Layout>
         </Layout>
