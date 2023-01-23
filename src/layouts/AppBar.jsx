@@ -45,20 +45,23 @@ const AppBar = ({ usuario }) => {
         //getItem(() => navegacion('/tablemodel'), 'Option 2', '2', <DesktopOutlined />),
         getItem(null, 'Mantenimiento', 'sub1', <ToolOutlined />, [
             getItem(() => navegacion('/ciudad'), 'Ciudad', '2'),
-            getItem(() => navegacion('/turno'), 'Turno', '3'),
-        ]),
-        getItem(null, 'Administrativo', 'sub2', <TeamOutlined />, [
-            getItem(() => navegacion('/instructor'), 'Instructores', '4'),
+            getItem(() => navegacion('/'), 'Materia', '3'),
+            getItem(() => navegacion('/'), 'Curso', '4'),
+            getItem(() => navegacion('/turno'), 'Turno', '5'),
         ]),
         getItem(null, 'Academico', 'sub3', <FolderOpenOutlined />, [
-            getItem(() => navegacion('/inscripcion'), 'Inscripcion', '7'),
-            getItem(() => navegacion('/venta'), 'Pedido venta', '8')
+            getItem(() => navegacion('/curso'), 'Planificacion', '6'),
+            getItem(() => navegacion('/convocatoria'), 'Convocatoria', '7'),//Agregar aqui la asistencia, faltas y evaluaciones
+            getItem(() => navegacion('/inscripcion'), 'Inscripcion', '8'),
+        ]),
+        getItem(null, 'Administrativo', 'sub2', <TeamOutlined />, [
+            getItem(() => navegacion('/instructor'), 'Instructores', '9'),
         ]),
         getItem(null, 'Reportes', 'sub4', <PieChartOutlined />, [
-            getItem(() => navegacion('/repomodelos'), 'Estadisticas', '9'),
-            getItem(() => navegacion('/informes'), 'Informes', '10'),
+            getItem(() => navegacion('/'), 'Estadisticas', '10'),
+            getItem(() => navegacion('/'), 'Informes', '11'),
         ]),
-        getItem(() => Logout(), 'Close session', '11', <LogoutOutlined />)
+        getItem(() => Logout(), 'Close session', '12', <LogoutOutlined />)
     ];
     return (
         <Layout hasSider

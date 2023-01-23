@@ -2,45 +2,49 @@
 
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+//import axios from "axios";
 import React from 'react';
 import { Button, Form, Input } from 'antd';
 
 
-const URI = 'http://186.158.152.141:3002/automot/api/contrato/';
+//const URI = 'http://186.158.152.141:3002/automot/api/contrato/';
 function NuevoContrato({ token }) {
 
     //Parte de nuevo registro por modal
     const [descripcion, setDescripcion] = useState('')
     const navigate = useNavigate();
 
+    /*
     const config = {
         headers: {
             "Authorization": `Bearer ${token}`,
         }
     };
+    */
 
     //procedimiento para actualizar
     const create = async (e) => {
+        /*
         //e.preventDefault();
         await axios.post(URI + "post/", {
             descripcion: descripcion,
             estado: "AC"
         }, config
         );
-        navigate('/contrato');
+        */
+        navigate('/instructor');
     }
 
     const btnCancelar = (e) => {
         e.preventDefault();
-        navigate('/contrato');
+        navigate('/instructor');
     }
 
 
     return (
         <div >
             <div style={{ marginBottom:`20px` }}>
-                <h2>Nueva contrato</h2>
+                <h2>Nuevo Instructor</h2>
             </div>
             <Form
                 name="basic"

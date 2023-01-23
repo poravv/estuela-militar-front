@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
 const data = [
-    {idinstructor:1,grado:'Cap',nombre:'Andres',apellido: 'Vera',edad:'32',sexo:'MA',materia:'FUNDAMENTOS DEL EMPLEO DEL PODER NAVAL'},
+{idinstructor:1,grado:'Cap',nombre:'Andres',apellido: 'Vera',edad:'32',sexo:'MA',materia:'FUNDAMENTOS DEL EMPLEO DEL PODER NAVAL'},
 {idinstructor:2,grado:'Tte',nombre:'Alcides',apellido: 'Lopez',edad:'35',sexo:'MA',materia:'MATEMATICA'},
 {idinstructor:3,grado:'Cap',nombre:'Raul',apellido: 'Ortega',edad:'29',sexo:'MA',materia:'EDUCACION FISICA'},
 {idinstructor:4,grado:'Tte',nombre:'Arturo',apellido: 'Viera',edad:'32',sexo:'MA',materia:'FISICA AVANZADA'},
@@ -397,4 +397,5 @@ const ListaContrato = ({ token }) => {
         </>
     )
 }
-export default ListaContrato
+
+export default ListaContrato;

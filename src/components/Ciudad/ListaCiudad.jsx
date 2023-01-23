@@ -1,6 +1,6 @@
 //import axios from 'axios'
 import { useState, 
-    //useEffect, 
+    //useEffect,
     useRef } from 'react'
 //import { Logout } from '../Utils/Logout';
 import * as XLSX from 'xlsx/xlsx.mjs';
@@ -27,6 +27,7 @@ const data = [
     {idciudad:9,descripcion:'Prueba',estado:'AC'},
     {idciudad:10,descripcion:'Prueba',estado:'AC'},
     {idciudad:11,descripcion:'Prueba',estado:'AC'},
+    {idciudad:12,descripcion:'Prueba',estado:'AC'},
 ]
 
 //const URI = 'http://186.158.152.141:3002/automot/api/ciudad/';

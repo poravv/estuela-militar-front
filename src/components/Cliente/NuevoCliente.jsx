@@ -147,7 +147,6 @@ function NuevoCliente({ token, idusuario }) {
                         <Radio value={'J'}>Juridico</Radio>
                     </Radio.Group>
                 </Form.Item>
-
                 {
                     tipoCli === "F" ?
                         <Form.Item name="sexo" rules={[{ required: true, message: 'Cargue sexo', },]}>
@@ -158,7 +157,6 @@ function NuevoCliente({ token, idusuario }) {
                         </Form.Item>
                         : null
                 }
-
                 <Buscador title={'Ciudad'} label={'descripcion'} value={'idciudad'} data={ciudades} onChange={onChange} onSearch={onSearch} />
 
                 <Form.Item

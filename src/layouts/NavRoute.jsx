@@ -15,8 +15,8 @@ import NuevoInscripcion from '../components/Inscripcion/NuevoInscripcion';
 import ListaCiudad from '../components/Ciudad/ListaCiudad';
 import NuevoCiudad from '../components/Ciudad/NuevoCiudad';
 import ReportePlaya from '../components/Reportes/ReportePlaya';
-import ListaContrato from '../components/Contrato/ListaContrato';
-import NuevoContrato from '../components/Contrato/NuevoContrato';
+import ListaInstructores from '../components/Instructores/ListaInstructores';
+import NuevoInstructores from '../components/Instructores/NuevoInstructores';
 import Informes from '../components/Reportes/Informes';
 import ListaTurno from '../components/Turno/ListaTurno';
 import NuevoTurno from '../components/Turno/NuevoTurno';
@@ -44,8 +44,8 @@ function NavRoute({ usuario }) {
                   <Route path='/ciudad' element={<ListaCiudad token={usuario.token} />} />
                   <Route path='/crearciudad' element={<NuevoCiudad token={usuario.token} />} />
                   #Modelo
-                  <Route path='/instructor' element={<ListaContrato token={usuario.token} />} />
-                  <Route path='/crearcontrato' element={<NuevoContrato token={usuario.token} />} />
+                  <Route path='/instructor' element={<ListaInstructores token={usuario.token} />} />
+                  <Route path='/crearcontrato' element={<NuevoInstructores token={usuario.token} />} />
                   #Turno
                   <Route path='/turno' element={<ListaTurno token={usuario.token} />} />
                   <Route path='/crearturno' element={<NuevoTurno token={usuario.token} />} />
