@@ -1,11 +1,12 @@
 
 
-import { 
+import {
     //useEffect, 
-    useState } from 'react'
+    useState
+} from 'react'
 import { useNavigate } from "react-router-dom";
 //import axios from "axios";
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, DatePicker } from 'antd';
 import Buscador from '../Buscador/Buscador';
 import { Row, Col, message } from 'antd';
 import { IoTrashOutline } from 'react-icons/io5';
@@ -18,13 +19,29 @@ const URIMODELO = 'http://186.158.152.141:3002/automot/api/detmodelo';
 const URICLI = 'http://186.158.152.141:3002/automot/api/cliente';
 */
 
+const lstmateria = [
+    { idmateria: 1, descripcion: 'Matematica', estado: 'AC' },
+    { idmateria: 2, descripcion: 'Ciencias', estado: 'AC' },
+    { idmateria: 3, descripcion: 'Economia', estado: 'AC' },
+]
 
+const lstcurso = [
+    { idcurso: 1, descripcion: 'Primero', estado: 'AC' },
+    { idcurso: 2, descripcion: 'Segundo', estado: 'AC' },
+    { idcurso: 3, descripcion: 'Tercero', estado: 'AC' },
+]
+
+const lstturno = [
+    { idturno: 1, descripcion: 'Mañana', estado: 'AC' },
+    { idturno: 2, descripcion: 'Tarde', estado: 'AC' },
+    { idturno: 3, descripcion: 'Noche', estado: 'AC' },
+]
 let fechaActual = new Date();
 
 function NuevoPlan({ token, idusuario, idsucursal }) {
 
     console.log(idsucursal)
- 
+
     //Parte de nuevo registro por modal
     const strFecha = fechaActual.getFullYear() + "-" + (fechaActual.getMonth() + 1) + "-" + fechaActual.getDate();
     const [tblplantmp, setTblPlanTmp] = useState([]);
@@ -35,52 +52,52 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
     const [cliente, setCliente] = useState(0);
     const navigate = useNavigate();
     // eslint-disable-next-line
-    const [lstdetmodelo, setLstdetmodelo] = useState([]);
+    //const [lstdetmodelo, setLstdetmodelo] = useState([]);
     // eslint-disable-next-line
     const [lstClientes, setLstClientes] = useState([]);
 
-/*
-    useEffect(() => {
-        getdetmodelos();
-        getClientes();
-        verificaproceso();
-        // eslint-disable-next-line
-    }, []);
-
-    //CONFIGURACION DE TOKEN
-    const config = {
-        headers: {
-            "Authorization": `Bearer ${token}`,
-        }
-    };
-
-    const getdetmodelos = async () => {
-        const res = await axios.get(`${URIMODELO}/getsucursal/${idsucursal}`, config);
-        
-        //console.log(res.data);
-        let detModel = [];
-
-        res.data.body.map((dm) => {
-            dm.descmodelo = dm.modelo.descripcion;
-            detModel.push(dm)
-            return true;
-        })
-
-        console.log(detModel);
-
-        setLstdetmodelo(detModel);
-    }
-
-    const getClientes = async () => {
-        const res = await axios.get(`${URICLI}/get`, config);
-        setLstClientes(res.data.body);
-    }
-    const verificaproceso = async () => {
-        return await axios.post(URI + `/verificaproceso/${idusuario}-inplanrio`, {}, config);
-    }
-*/
-
+    /*
+        useEffect(() => {
+            getdetmodelos();
+            getClientes();
+            verificaproceso();
+            // eslint-disable-next-line
+        }, []);
     
+        //CONFIGURACION DE TOKEN
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            }
+        };
+    
+        const getdetmodelos = async () => {
+            const res = await axios.get(`${URIMODELO}/getsucursal/${idsucursal}`, config);
+            
+            //console.log(res.data);
+            let detModel = [];
+    
+            res.data.body.map((dm) => {
+                dm.descmodelo = dm.modelo.descripcion;
+                detModel.push(dm)
+                return true;
+            })
+    
+            console.log(detModel);
+    
+            setLstdetmodelo(detModel);
+        }
+    
+        const getClientes = async () => {
+            const res = await axios.get(`${URICLI}/get`, config);
+            setLstClientes(res.data.body);
+        }
+        const verificaproceso = async () => {
+            return await axios.post(URI + `/verificaproceso/${idusuario}-inplanrio`, {}, config);
+        }
+    */
+
+
 
     const guardaCab = async (valores) => {
         //return await axios.post(URI + "/post/", valores, config);
@@ -119,14 +136,14 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
                     tblplantmp.map((plan) => {
                         console.log(plan);
                         console.log('iddet_modelo: ', plan.detmodelo.iddet_modelo)
-                        console.log('descuento: ',plan.descuento)
-                        console.log('subtotal: ',(plan.detmodelo.costo))
-                        console.log('idplan: ',(cabecera.data.body.idplan))
-                        
+                        console.log('descuento: ', plan.descuento)
+                        console.log('subtotal: ', (plan.detmodelo.costo))
+                        console.log('idplan: ', (cabecera.data.body.idplan))
+
                         guardaDetalle({
                             iddet_modelo: plan.detmodelo.iddet_modelo,
                             //estado: plan.detmodelo.estado,
-                            estado:'AC',
+                            estado: 'AC',
                             descuento: plan.descuento,
                             idplan: cabecera.data.body.idplan,
                             subtotal: plan.detmodelo.costo,
@@ -136,7 +153,7 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
                         return true;
 
                     });
-                    
+
                     message.success('Registro almacenado');
 
                 } catch (error) {
@@ -146,7 +163,7 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
                 }
                 navigate('/plan');
             });
-            
+
         } catch (e) {
             console.log(e);
             message.error('Error en la creacion');
@@ -157,7 +174,7 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
 
     const agregarLista = async (e) => {
         e.preventDefault();
-        
+
         //console.log(detmodeloSelect);
 
         //Validacion de existencia del detmodelo dentro de la lista 
@@ -165,19 +182,19 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
         const validExist = tblplantmp.filter((inv) => inv.iddet_modelo === detmodeloSelect.iddet_modelo);
 
         if (detmodeloSelect !== null) {
-                if (validExist.length === 0) {
-                        tblplantmp.push({
-                            iddet_modelo: detmodeloSelect.iddet_modelo,
-                            detmodelo: detmodeloSelect,
-                            descuento: descuento
-                        });
+            if (validExist.length === 0) {
+                tblplantmp.push({
+                    iddet_modelo: detmodeloSelect.iddet_modelo,
+                    detmodelo: detmodeloSelect,
+                    descuento: descuento
+                });
 
-                        setTotal(parseInt(total + (detmodeloSelect.costo) - descuento));
-                        setTotalIva(parseInt(totalIva + ((detmodeloSelect.costo*detmodeloSelect.tipo_iva/100))));
+                setTotal(parseInt(total + (detmodeloSelect.costo) - descuento));
+                setTotalIva(parseInt(totalIva + ((detmodeloSelect.costo * detmodeloSelect.tipo_iva / 100))));
 
-                    } else {
-                        message.warning('Producto ya existe');
-                    }
+            } else {
+                message.warning('Producto ya existe');
+            }
         } else {
             message.warning('Seleccione un detmodelo');
         }
@@ -191,8 +208,8 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
     const onChangedetmodelo = (value) => {
         console.log(value);
         //console.log(lstdetmodelo);
-        lstdetmodelo.find((element) => {
-            
+        lstmateria.find((element) => {
+
             if (element.iddet_modelo === value) {
                 //console.log(element);
                 setDetmodeloSelect(element)
@@ -202,7 +219,7 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
             }
         });
     };
-
+    // eslint-disable-next-line
     const onChangeCliente = (value) => {
 
         lstClientes.find((element) => {
@@ -220,7 +237,7 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
         console.log('search:', value);
     };
 
-    const extraerRegistro = async (e,id, costo, monto_iva) => {
+    const extraerRegistro = async (e, id, costo, monto_iva) => {
         e.preventDefault();
         //console.log('Datos: ',costo,monto_iva)
         const updtblPlan = tblplantmp.filter(inv => inv.iddet_modelo !== id);
@@ -234,7 +251,7 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
     return (
         <>
             <div style={{ marginBottom: `20px` }}>
-                <h2>Nueva Planificación</h2>
+                <h2>Planificación</h2>
             </div>
             <div>
                 <Form
@@ -242,22 +259,33 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
                     initialValues={{ remember: true, }}
                     onFinish={gestionGuardado}
                     autoComplete="off">
-                    <Row style={{ justifyContent: `center` }}>
-                        <Col style={{ marginLeft: `15px` }}>
-                            <Buscador label={'razon_social'} title={'Cliente'} value={'idcliente'} data={lstClientes} onChange={onChangeCliente} onSearch={onSearch} />
-                        </Col>
-                    </Row>
-
 
                     <Row style={{ justifyContent: `center`, margin: `10px` }}>
                         <Col style={{ marginLeft: `15px` }}>
-                            <Buscador label={'descmodelo'} title={'Auto'} value={'iddet_modelo'} data={lstdetmodelo} onChange={onChangedetmodelo} onSearch={onSearch} />
+                            <Buscador label={'descripcion'} title={'Curso'} value={'idcurso'} data={lstcurso} onChange={onChangedetmodelo} onSearch={onSearch} />
+                        </Col>
+                        <Col style={{ marginLeft: `15px` }}>
+                            <Buscador label={'descripcion'} title={'Turno'} value={'idturno'} data={lstturno} onChange={onChangedetmodelo} onSearch={onSearch} />
+                        </Col>
+
+                    </Row>
+                    <Row style={{ justifyContent: `center`, margin: `10px` }}>
+                        <Col style={{ marginLeft: `15px` }}>
+                            <Buscador label={'descripcion'} title={'Materia'} value={'idmateria'} data={lstmateria} onChange={onChangedetmodelo} onSearch={onSearch} />
                         </Col>
                         <Col>
-                            <Form.Item name="descuento" >
-                                <Input type='number' placeholder='Descuento' value={descuento} onChange={(e) => setDescuento(e.target.value)} />
+                            <Form.Item name="hora" >
+                                <Input type='number' placeholder='Carga horaria' value={descuento} onChange={(e) => setDescuento(e.target.value)} />
                             </Form.Item>
                         </Col>
+                        <Col>
+                            <Form.Item name="fecha" >
+                                <DatePicker.RangePicker style={{ width: '70%' }} />
+                            </Form.Item>
+                        </Col>
+                        <Col>
+                        </Col>
+
                         <Col style={{ marginLeft: `15px` }}>
                             <Button type="primary" htmlType="submit" onClick={(e) => agregarLista(e)} >
                                 Agregar
@@ -265,16 +293,13 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
                         </Col>
                     </Row>
                     <div style={{ alignItems: `center`, justifyContent: `center`, margin: `0px`, display: `flex` }}>
-                        <Table striped bordered hover style={{ backgroundColor:`white` }}>
+                        <Table striped bordered hover style={{ backgroundColor: `white` }}>
                             <thead className='table-primary'>
                                 <tr>
-                                    <th>Modelo</th>
-                                    <th>Costo</th>
-                                    <th>Descuento</th>
-                                    <th>Iva</th>
-                                    <th>Monto Iva</th>
-                                    <th>Subtotal iva</th>
-                                    <th>Subtotal</th>
+                                    <th>Materia</th>
+                                    <th>Carga horaria</th>
+                                    <th>Fecha inicio</th>
+                                    <th>Fecha fin</th>
                                     <th>Accion</th>
                                 </tr>
                             </thead>
@@ -285,30 +310,26 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
                                         <td> {inv.detmodelo.costo} </td>
                                         <td> {inv.descuento} </td>
                                         <td> {inv.detmodelo.tipo_iva + '%'} </td>
-                                        <td> {inv.detmodelo.costo*inv.detmodelo.tipo_iva/100} </td>
-                                        <td> {(inv.detmodelo.costo*inv.detmodelo.tipo_iva/100)} </td>
+                                        <td> {inv.detmodelo.costo * inv.detmodelo.tipo_iva / 100} </td>
+                                        <td> {(inv.detmodelo.costo * inv.detmodelo.tipo_iva / 100)} </td>
                                         <td> {inv.detmodelo.costo} </td>
                                         <td>
-                                            <button onClick={(e) => extraerRegistro(e,inv.iddet_modelo, (inv.detmodelo.costo - descuento), parseInt((inv.detmodelo.costo*inv.detmodelo.tipo_iva)/100))} className='btn btn-danger'><IoTrashOutline /></button>
+                                            <button onClick={(e) => extraerRegistro(e, inv.iddet_modelo, (inv.detmodelo.costo - descuento), parseInt((inv.detmodelo.costo * inv.detmodelo.tipo_iva) / 100))} className='btn btn-danger'><IoTrashOutline /></button>
                                         </td>
                                     </tr>
                                 )) : null
                                 }
+                                <tr key={1}>
+                                    <td> {'Ciencias'} </td>
+                                    <td> {'100'} </td>
+                                    <td> {'10-01-2023'} </td>
+                                    <td> {'25-06-2023'} </td>
+                                    <td>
+                                        <button className='btn btn-danger'><IoTrashOutline /></button>
+                                    </td>
+                                </tr>
                             </tbody>
-                            <tfoot >
-                                <tr>
-                                    <th>Total</th>
-                                    <th style={{ textAlign: `start` }} colSpan={7}>
-                                        <b>{total}</b>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>Total iva</th>
-                                    <th style={{ textAlign: `start` }} colSpan={7}>
-                                        <b>{parseInt(totalIva) ?? 0}</b>
-                                    </th>
-                                </tr>
-                            </tfoot>
+
                         </Table>
                     </div>
 
@@ -329,3 +350,20 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
 }
 
 export default NuevoPlan;
+/*
+
+ <tfoot >
+                                <tr>
+                                    <th>Total</th>
+                                    <th style={{ textAlign: `start` }} colSpan={7}>
+                                        <b>{total}</b>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Total iva</th>
+                                    <th style={{ textAlign: `start` }} colSpan={7}>
+                                        <b>{parseInt(totalIva) ?? 0}</b>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                            */
