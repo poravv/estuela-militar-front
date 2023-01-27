@@ -22,6 +22,10 @@ import ListaPlan from '../components/Planificacion/ListaPlafinicacion';
 import NuevoPlan from '../components/Planificacion/NuevaPlanificacion';
 import ListaConvocatoria from '../components/Convocatoria/ListaConvocatoria';
 import NuevoConvocatoria from '../components/Convocatoria/NuevaConvocatoria';
+import ListaCursosH from '../components/CursosH/ListaCursosH';
+import ListaAsistencia from '../components/Asistencia/ListaAsistencia';
+import ListaFalta from '../components/Faltas/ListaFaltas';
+import NuevoFalta from '../components/Faltas/NuevaFalta';
 
 function NavRoute({ usuario }) {
   return (
@@ -65,7 +69,14 @@ function NavRoute({ usuario }) {
             #Convocatoria
             <Route path='/convocatoria' element={<ListaConvocatoria token={usuario.token} />} />
             <Route path='/crearconvocatoria' element={<NuevoConvocatoria token={usuario.token} />} />
+
+            #CursosH
+            <Route path='/cursosH' element={<ListaCursosH token={usuario.token} />} />
+            <Route path='/asistencia/:idconvocatoria' element={<ListaAsistencia token={usuario.token} />} />
+            <Route path='/faltas/:idinscripcion' element={<ListaFalta token={usuario.token} />} />
+            <Route path='/crearfalta' element={<NuevoFalta token={usuario.token} />} />
             
+
             <Route path='*' element={<Navigate replace to='/' />} />
             #Venta
             <Route path='/venta' element={<ListaVenta token={usuario.token} idusuario={usuario.body.idusuario} />} />

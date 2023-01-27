@@ -7,7 +7,8 @@ import {
     ToolOutlined,
     LogoutOutlined,
     PieChartOutlined,
-    FolderOpenOutlined
+    FolderOpenOutlined,
+    CheckSquareOutlined
 } from '@ant-design/icons';
 import { Layout, Menu,Image } from 'antd';
 import { Outlet } from 'react-router-dom';
@@ -49,19 +50,22 @@ const AppBar = ({ usuario }) => {
             getItem(() => navegacion('/'), 'Curso', '4'),
             getItem(() => navegacion('/turno'), 'Turno', '5'),
         ]),
-        getItem(null, 'Academico', 'sub3', <FolderOpenOutlined />, [
+        getItem(null, 'Academico', 'sub2', <FolderOpenOutlined />, [
             getItem(() => navegacion('/plan'), 'Planificacion', '6'),
             getItem(() => navegacion('/convocatoria'), 'Convocatoria', '7'),//Agregar aqui la asistencia, faltas y evaluaciones
             //getItem(() => navegacion('/inscripcion'), 'Inscripcion', '8'),
         ]),
-        getItem(null, 'Administrativo', 'sub2', <TeamOutlined />, [
+        getItem(null, 'Administrativo', 'sub3', <TeamOutlined />, [
             getItem(() => navegacion('/instructor'), 'Instructores', '9'),
         ]),
-        getItem(null, 'Reportes', 'sub4', <PieChartOutlined />, [
-            getItem(() => navegacion('/'), 'Estadisticas', '10'),
-            getItem(() => navegacion('/'), 'Informes', '11'),
+        getItem(null, 'Gestion', 'sub4', <CheckSquareOutlined />, [
+            getItem(() => navegacion('/cursosH'), 'Curso/Materia', '10'),
         ]),
-        getItem(() => Logout(), 'Close session', '12', <LogoutOutlined />)
+        getItem(null, 'Reportes', 'sub5', <PieChartOutlined />, [
+            getItem(() => navegacion('/'), 'Estadisticas', '11'),
+            getItem(() => navegacion('/'), 'Informes', '12'),
+        ]),
+        getItem(() => Logout(), 'Close session', '13', <LogoutOutlined />)
     ];
     return (
         <Layout hasSider

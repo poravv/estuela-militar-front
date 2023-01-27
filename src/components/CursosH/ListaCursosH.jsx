@@ -1,12 +1,15 @@
 //import axios from 'axios'
-import { useState, 
+import {
+    useState,
     //useEffect, 
-    useRef } from 'react'
+    useRef
+} from 'react';
 //import { Logout } from '../Utils/Logout';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import { Popconfirm, Typography } from 'antd';
 import { Form } from 'antd';
-import TableModel from '../TableModel/TableModel';
+//import TableModel from '../TableModel/TableModel';
+import TableModelExpand from '../TableModel/TableModelExpand';
 //import { Tag } from 'antd';
 import { message } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
@@ -16,30 +19,21 @@ import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
 const data = [
-{idinscripcion:1,grado:'Cap',nombre:'Andres',apellido: 'Vera',curso:'Informatica',turno:'Mañana'},
-{idinscripcion:2,grado:'Tte',nombre:'Alcides',apellido: 'Lopez',curso:'Matematica',turno:'Mañana'},
-{idinscripcion:3,grado:'Cap',nombre:'Raul',apellido: 'Ortega',curso:'Fisica',turno:'Mañana'},
-{idinscripcion:4,grado:'Tte',nombre:'Arturo',apellido: 'Viera',curso:'Informatica',turno:'Mañana'},
-{idinscripcion:5,grado:'Cap',nombre:'Enrique',apellido: 'Torres',curso:'Informatica',turno:'Mañana'},
-{idinscripcion:6,grado:'Tte',nombre:'Salomon',apellido: 'Fernandez',curso:'Fisica',turno:'Mañana'},
-{idinscripcion:7,grado:'Cap',nombre:'Hugo',apellido: 'Perez',curso:'Matematica',turno:'Mañana'},
-{idinscripcion:8,grado:'Tte',nombre:'Hector',apellido: 'Aguilar',curso:'Fisica',turno:'Mañana'},
-{idinscripcion:9,grado:'Cap',nombre:'Cesar',apellido: 'Gavilan',curso:'Fisica',turno:'Mañana'},
-{idinscripcion:10,grado:'Tte',nombre:'David',apellido: 'Vera',curso:'Matematica',turno:'Mañana'},
-{idinscripcion:11,grado:'Cap',nombre:'Francisco',apellido: 'Chavez',curso:'Informatica',turno:'Mañana'},
-{idinscripcion:12,grado:'Tte',nombre:'Alejandro',apellido: 'Villasboa',curso:'Informatica',turno:'Mañana'},
-{idinscripcion:13,grado:'Cap',nombre:'Isaias',apellido: 'Torres',curso:'Fisica',turno:'Mañana'},
-{idinscripcion:14,grado:'Tte',nombre:'Raquel',apellido: 'Lovera',curso:'Fisica',turno:'Tarde'},
-{idinscripcion:15,grado:'Cap',nombre:'Angelica',apellido: 'Franco',curso:'Negocios',turno:'Tarde'},
-{idinscripcion:16,grado:'Tte',nombre:'Luz',apellido: 'Almeida',curso:'Fisica',turno:'Tarde'},
-{idinscripcion:17,grado:'Cap',nombre:'Aleli',apellido: 'Vera',curso:'Informatica',turno:'Tarde'},
-{idinscripcion:18,grado:'Tte',nombre:'Claudia',apellido: 'Rotela',curso:'Negocios',turno:'Tarde'},
+    { idconvocatoria: 1, plan: 'Ing Informatica', turno: 'Tarde', detalle: [
+        { idconvocatoria:1,iddetalle: 1, materia: 'Matematica', carga_horaria: '100', finicio: '01-01-2023', ffin: `25-06-2023`, instructor: `Cap. Claudio Ibarra` },
+        { idconvocatoria:1,iddetalle: 2, materia: 'Ciencias', carga_horaria: '120', finicio: '26-06-2023', ffin: `10-10-2023`, instructor: `Cap. Alexis Aguirre` },
+    ] },
+    { idconvocatoria: 2, plan: 'Maestria en Comunicación', turno: 'Mañana', detalle: [
+        { idconvocatoria:2,iddetalle: 1, materia: 'Matematica', carga_horaria: '100', finicio: '01-01-2023', ffin: `25-06-2023`, instructor: `Cap. Claudio Ibarra` },
+        { idconvocatoria:2,iddetalle: 2, materia: 'Ciencias', carga_horaria: '120', finicio: '26-06-2023', ffin: `10-10-2023`, instructor: `Cap. Alexis Aguirre` },
+    ] },
 ]
 
-//const URI = 'http://186.158.152.141:3002/automot/api/inscripcion/';
+
+//const URI = 'http://186.158.152.141:3002/automot/api/cursosH/';
 //let fechaActual = new Date();
-const ListaInscripcion = ({ token }) => {
-    console.log('entra en inscripcion')
+const ListaCursosH = ({ token }) => {
+    console.log(data)
     const [form] = Form.useForm();
     //const [data, setData] = useState([]);
 
@@ -54,7 +48,7 @@ const ListaInscripcion = ({ token }) => {
     //---------------------------------------------------
     /*
     useEffect(() => {
-        getInscripcion();
+        getCursosH();
         // eslint-disable-next-line
     }, []);
 
@@ -65,7 +59,7 @@ const ListaInscripcion = ({ token }) => {
         }
     };
 
-    const getInscripcion = async () => {
+    const getCursosH = async () => {
         const res = await axios.get(`${URI}/get`, config)
         /*En caso de que de error en el server direcciona a login* /
         if (res.data.error) {
@@ -75,7 +69,7 @@ const ListaInscripcion = ({ token }) => {
         const resDataId = [];
 
         res.data.body.map((rs) => {
-            rs.key = rs.idinscripcion;
+            rs.key = rs.idconvocatoria;
             resDataId.push(rs);
             return true;
         })
@@ -183,82 +177,75 @@ const ListaInscripcion = ({ token }) => {
 
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Inscripcions');
-        XLSX.writeFile(wb, 'Inscripcions.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'CursosHs');
+        XLSX.writeFile(wb, 'CursosHs.xlsx')
     }
 
-    const deleteInscripcion = async (id) => {
+    const deleteCursosH = async (id) => {
         //await axios.delete(`${URI}/del/${id}`, config)
-        //getInscripcion();
+        //getCursosH();
     }
-// eslint-disable-next-line
-    const updateInscripcion = async (newData) => {
+    // eslint-disable-next-line
+    const updateCursosH = async (newData) => {
         //console.log('Entra en update');
         //console.log(newData)
-        
+
         /*
-        await axios.put(URI + "put/" + newData.idinscripcion, newData, config
+        await axios.put(URI + "put/" + newData.idconvocatoria, newData, config
         );
-        getInscripcion();*/
+        getCursosH();*/
     }
 
     const columns = [
         {
             title: 'id',
-            dataIndex: 'idinscripcion',
-            width: '5%',
+            dataIndex: 'idconvocatoria',
+            width: '6%',
             editable: false,
-            ...getColumnSearchProps('idinscripcion'),
+            ...getColumnSearchProps('idconvocatoria'),
         },
         {
-            title: 'Grado',
-            dataIndex: 'grado',
-            //width: '22%',
+            title: 'Plan',
+            dataIndex: 'plan',
+            width: '22%',
             editable: true,
-            ...getColumnSearchProps('grado'),
+            ...getColumnSearchProps('plan'),
         },
         {
-            title: 'Nombre',
-            dataIndex: 'nombre',
-            //width: '22%',
+            title: 'Turno',
+            dataIndex: 'turno',
+            width: '22%',
             editable: true,
-            ...getColumnSearchProps('nombre'),
+            ...getColumnSearchProps('turno'),
         },
-        {
-            title: 'Apellido',
-            dataIndex: 'apellido',
-            //width: '22%',
-            editable: true,
-            ...getColumnSearchProps('apellido'),
-        },
-       /* {
-            title: 'Estado',
-            dataIndex: 'estado',
-            //width: '7%',
-            editable: true,
-            render: (_, { estado, idinscripcion }) => {
-                let color = 'black';
-                if (estado.toUpperCase() === 'AC') { color = 'green' }
-                else { color = 'volcano'; }
-                return (
-                    <Tag color={color} key={idinscripcion} >
-                        {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
-                    </Tag>
-                );
-            },
-        },*/
+        /* {
+             title: 'Estado',
+             dataIndex: 'estado',
+             //width: '7%',
+             editable: true,
+             render: (_, { estado, idconvocatoria }) => {
+                 let color = 'black';
+                 if (estado.toUpperCase() === 'AC') { color = 'green' }
+                 else { color = 'volcano'; }
+                 return (
+                     <Tag color={color} key={idconvocatoria} >
+                         {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
+                     </Tag>
+                 );
+             },
+         },*/
         {
             title: 'Gestion',
             dataIndex: 'gestion',
             render: (_, record) => {
                 return (
                     <>
-                   <Button style={{ marginLeft:`10px` }}  onClick={() => navigate(`/faltas/${record.idconvocatoria}`)} >Faltas</Button> 
+                   <Button  onClick={() => navigate(`/asistencia/${record.idconvocatoria}`)} >Asistencia</Button>
+                   <Button style={{ marginLeft:`10px` }}  onClick={() => navigate(`/inscripcion/${record.idconvocatoria}`)} >Lista</Button> 
                     </>
                 )
             },
         },
-
         {
             title: 'Accion',
             dataIndex: 'operacion',
@@ -269,7 +256,7 @@ const ListaInscripcion = ({ token }) => {
                 return editable ? (
                     <span>
                         <Typography.Link
-                            onClick={() => save(record.idinscripcion)}
+                            onClick={() => save(record.idconvocatoria)}
                             style={{
                                 marginRight: 8,
                             }} >
@@ -289,7 +276,7 @@ const ListaInscripcion = ({ token }) => {
 
                         <Popconfirm
                             title="Desea eliminar este registro?"
-                            onConfirm={() => confirmDel(record.idinscripcion)}
+                            onConfirm={() => confirmDel(record.idconvocatoria)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No" >
@@ -302,58 +289,122 @@ const ListaInscripcion = ({ token }) => {
                 );
             },
         }
-    ]
+    ];
+
+    //{iddetalle:11,materia:'Matematica',carga_horaria:'100',finicio:'01-01-2023',ffin:`25-06-2023`,instructor:`Cap. Claudio Ibarra`},
+
+    const columnDet = [
+        {
+            title: 'iddetalle',
+            dataIndex: 'iddetalle',
+            key: 'iddetalle',
+            width: '2%',
+        },
+        {
+            title: 'Materia',
+            dataIndex: 'materia',
+            width: '2%',
+        },
+        {
+            title: 'Carga horaria',
+            dataIndex: 'carga_horaria',
+            width: '2%',
+            /*
+            render: (det_modelo) => {
+                //console.log(det_modelo)
+                return det_modelo.costo
+            }
+            */
+        },
+        {
+            title: 'Fecha inicio',
+            dataIndex: 'finicio',
+            width: '2%',
+        },
+        {
+            title: 'Fecha fin',
+            dataIndex: 'ffin',
+            width: '2%',
+        },
+        {
+            title: 'Instructor',
+            dataIndex: 'instructor',
+            key: 'instructor',
+            width: '2%',
+            /*
+            render: (_, { estado, idinventario }) => {
+                let color = 'black';
+                if (estado.toUpperCase() === 'AC') { color = 'blue' }
+                else { color = 'volcano'; }
+                return (
+                    <Tag color={color} key={idinventario} >
+                        {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
+                    </Tag>
+                );
+            },
+            */
+        },
+        {
+            title: 'Action',
+            dataIndex: 'operation',
+            key: 'operation',
+            width: '5%',
+            render: () => (
+                null
+            ),
+        },
+    ];
 
     const edit = (record) => {
         form.setFieldsValue({
             ...record,
         });
-        setEditingKey(record.idinscripcion);
+        setEditingKey(record.idconvocatoria);
     };
 
 
-    const isEditing = (record) => record.idinscripcion === editingKey;
+    const isEditing = (record) => record.idconvocatoria === editingKey;
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const confirmDel = (idinscripcion) => {
+    const confirmDel = (idconvocatoria) => {
         message.success('Procesando');
-        deleteInscripcion(idinscripcion);
+        deleteCursosH(idconvocatoria);
     };
 
-    const save = async (idinscripcion) => {
-/*
-
-        try {
-            const row = await form.validateFields();
-            const newData = [...data];
-            const index = newData.findIndex((item) => idinscripcion === item.idinscripcion);
-
-            if (index > -1) {
-
-                const item = newData[index];
-                newData.splice(index, 1, {
-                    ...item,
-                    ...row,
-                });
-
-                newData[index].fecha_upd = strFecha;
-                //console.log(newData);
-                updateInscripcion(newData[index]);
-                setData(newData);
-                setEditingKey('');
-
-                message.success('Registro actualizado');
-            } else {
-                newData.push(row);
-                setData(newData);
-                setEditingKey('');
-            }
-        } catch (errInfo) {
-            console.log('Validate Failed:', errInfo);
-        }*/
+    const save = async (idconvocatoria) => {
+        /*
+        
+                try {
+                    const row = await form.validateFields();
+                    const newData = [...data];
+                    const index = newData.findIndex((item) => idconvocatoria === item.idconvocatoria);
+        
+                    if (index > -1) {
+        
+                        const item = newData[index];
+                        newData.splice(index, 1, {
+                            ...item,
+                            ...row,
+                        });
+        
+                        newData[index].fecha_upd = strFecha;
+                        //console.log(newData);
+                        updateCursosH(newData[index]);
+                        setData(newData);
+                        setEditingKey('');
+        
+                        message.success('Registro actualizado');
+                    } else {
+                        newData.push(row);
+                        setData(newData);
+                        setEditingKey('');
+                    }
+                } catch (errInfo) {
+                    console.log('Validate Failed:', errInfo);
+                }*/
     };
 
 
@@ -376,19 +427,14 @@ const ListaInscripcion = ({ token }) => {
 
     return (
         <>
-            <h3>Lista estudiantes</h3>
+            <h3>Cursos / Materias</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
             <Button type='primary' style={{ backgroundColor: `#E94Informatica5`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
-            
-            <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idinscripcion'} />
+
+            <TableModelExpand columnDet={columnDet} keyDet={'iddetalle'} token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idconvocatoria'} />
         </>
     )
 }
-export default ListaInscripcion
+export default ListaCursosH;
 
-/*
-<div style={{ marginBottom: `5px`, textAlign: `end` }}>
-
-                <Button type="primary" onClick={() => navigate('/crearinscripcion')} >{<PlusOutlined />} Nuevo</Button>
-            </div>
-*/
+//<TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idconvocatoria'} />

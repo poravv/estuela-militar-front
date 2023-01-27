@@ -1,45 +1,28 @@
 //import axios from 'axios'
 import { useState, 
-    //useEffect, 
+    //useEffect,
     useRef } from 'react'
 //import { Logout } from '../Utils/Logout';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import { Popconfirm, Typography } from 'antd';
 import { Form } from 'antd';
 import TableModel from '../TableModel/TableModel';
-//import { Tag } from 'antd';
+import { Tag } from 'antd';
 import { message } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
 const data = [
-{idinscripcion:1,grado:'Cap',nombre:'Andres',apellido: 'Vera',curso:'Informatica',turno:'Mañana'},
-{idinscripcion:2,grado:'Tte',nombre:'Alcides',apellido: 'Lopez',curso:'Matematica',turno:'Mañana'},
-{idinscripcion:3,grado:'Cap',nombre:'Raul',apellido: 'Ortega',curso:'Fisica',turno:'Mañana'},
-{idinscripcion:4,grado:'Tte',nombre:'Arturo',apellido: 'Viera',curso:'Informatica',turno:'Mañana'},
-{idinscripcion:5,grado:'Cap',nombre:'Enrique',apellido: 'Torres',curso:'Informatica',turno:'Mañana'},
-{idinscripcion:6,grado:'Tte',nombre:'Salomon',apellido: 'Fernandez',curso:'Fisica',turno:'Mañana'},
-{idinscripcion:7,grado:'Cap',nombre:'Hugo',apellido: 'Perez',curso:'Matematica',turno:'Mañana'},
-{idinscripcion:8,grado:'Tte',nombre:'Hector',apellido: 'Aguilar',curso:'Fisica',turno:'Mañana'},
-{idinscripcion:9,grado:'Cap',nombre:'Cesar',apellido: 'Gavilan',curso:'Fisica',turno:'Mañana'},
-{idinscripcion:10,grado:'Tte',nombre:'David',apellido: 'Vera',curso:'Matematica',turno:'Mañana'},
-{idinscripcion:11,grado:'Cap',nombre:'Francisco',apellido: 'Chavez',curso:'Informatica',turno:'Mañana'},
-{idinscripcion:12,grado:'Tte',nombre:'Alejandro',apellido: 'Villasboa',curso:'Informatica',turno:'Mañana'},
-{idinscripcion:13,grado:'Cap',nombre:'Isaias',apellido: 'Torres',curso:'Fisica',turno:'Mañana'},
-{idinscripcion:14,grado:'Tte',nombre:'Raquel',apellido: 'Lovera',curso:'Fisica',turno:'Tarde'},
-{idinscripcion:15,grado:'Cap',nombre:'Angelica',apellido: 'Franco',curso:'Negocios',turno:'Tarde'},
-{idinscripcion:16,grado:'Tte',nombre:'Luz',apellido: 'Almeida',curso:'Fisica',turno:'Tarde'},
-{idinscripcion:17,grado:'Cap',nombre:'Aleli',apellido: 'Vera',curso:'Informatica',turno:'Tarde'},
-{idinscripcion:18,grado:'Tte',nombre:'Claudia',apellido: 'Rotela',curso:'Negocios',turno:'Tarde'},
+    {idfalta:1,descripcion:'Ausencia injustificada',estado:'AC'},
 ]
 
-//const URI = 'http://186.158.152.141:3002/automot/api/inscripcion/';
+//const URI = 'http://186.158.152.141:3002/automot/api/falta/';
 //let fechaActual = new Date();
-const ListaInscripcion = ({ token }) => {
-    console.log('entra en inscripcion')
+const ListaFalta = ({ token }) => {
+    console.log('entra en falta')
     const [form] = Form.useForm();
     //const [data, setData] = useState([]);
 
@@ -52,9 +35,10 @@ const ListaInscripcion = ({ token }) => {
     const searchInput = useRef(null);
     const navigate = useNavigate();
     //---------------------------------------------------
+
     /*
     useEffect(() => {
-        getInscripcion();
+        getFalta();
         // eslint-disable-next-line
     }, []);
 
@@ -65,7 +49,7 @@ const ListaInscripcion = ({ token }) => {
         }
     };
 
-    const getInscripcion = async () => {
+    const getFalta = async () => {
         const res = await axios.get(`${URI}/get`, config)
         /*En caso de que de error en el server direcciona a login* /
         if (res.data.error) {
@@ -75,7 +59,7 @@ const ListaInscripcion = ({ token }) => {
         const resDataId = [];
 
         res.data.body.map((rs) => {
-            rs.key = rs.idinscripcion;
+            rs.key = rs.idfalta;
             resDataId.push(rs);
             return true;
         })
@@ -183,82 +167,56 @@ const ListaInscripcion = ({ token }) => {
 
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Inscripcions');
-        XLSX.writeFile(wb, 'Inscripcions.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'faltas');
+        XLSX.writeFile(wb, 'faltas.xlsx')
     }
 
-    const deleteInscripcion = async (id) => {
+    const deleteFalta = async (id) => {
         //await axios.delete(`${URI}/del/${id}`, config)
-        //getInscripcion();
+        //getFalta();
     }
 // eslint-disable-next-line
-    const updateInscripcion = async (newData) => {
+    const updateFalta = async (newData) => {
         //console.log('Entra en update');
         //console.log(newData)
         
         /*
-        await axios.put(URI + "put/" + newData.idinscripcion, newData, config
+        await axios.put(URI + "put/" + newData.idfalta, newData, config
         );
-        getInscripcion();*/
+        getFalta();*/
     }
 
     const columns = [
         {
             title: 'id',
-            dataIndex: 'idinscripcion',
+            dataIndex: 'idfalta',
             width: '5%',
             editable: false,
-            ...getColumnSearchProps('idinscripcion'),
+            ...getColumnSearchProps('idfalta'),
         },
         {
-            title: 'Grado',
-            dataIndex: 'grado',
+            title: 'Descripcion',
+            dataIndex: 'descripcion',
             //width: '22%',
             editable: true,
-            ...getColumnSearchProps('grado'),
+            ...getColumnSearchProps('descripcion'),
         },
         {
-            title: 'Nombre',
-            dataIndex: 'nombre',
-            //width: '22%',
-            editable: true,
-            ...getColumnSearchProps('nombre'),
-        },
-        {
-            title: 'Apellido',
-            dataIndex: 'apellido',
-            //width: '22%',
-            editable: true,
-            ...getColumnSearchProps('apellido'),
-        },
-       /* {
             title: 'Estado',
             dataIndex: 'estado',
             //width: '7%',
             editable: true,
-            render: (_, { estado, idinscripcion }) => {
+            render: (_, { estado, idfalta }) => {
                 let color = 'black';
                 if (estado.toUpperCase() === 'AC') { color = 'green' }
                 else { color = 'volcano'; }
                 return (
-                    <Tag color={color} key={idinscripcion} >
+                    <Tag color={color} key={idfalta} >
                         {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
                     </Tag>
                 );
             },
-        },*/
-        {
-            title: 'Gestion',
-            dataIndex: 'gestion',
-            render: (_, record) => {
-                return (
-                    <>
-                   <Button style={{ marginLeft:`10px` }}  onClick={() => navigate(`/faltas/${record.idconvocatoria}`)} >Faltas</Button> 
-                    </>
-                )
-            },
         },
-
         {
             title: 'Accion',
             dataIndex: 'operacion',
@@ -269,7 +227,7 @@ const ListaInscripcion = ({ token }) => {
                 return editable ? (
                     <span>
                         <Typography.Link
-                            onClick={() => save(record.idinscripcion)}
+                            onClick={() => save(record.idfalta)}
                             style={{
                                 marginRight: 8,
                             }} >
@@ -289,7 +247,7 @@ const ListaInscripcion = ({ token }) => {
 
                         <Popconfirm
                             title="Desea eliminar este registro?"
-                            onConfirm={() => confirmDel(record.idinscripcion)}
+                            onConfirm={() => confirmDel(record.idfalta)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No" >
@@ -308,28 +266,28 @@ const ListaInscripcion = ({ token }) => {
         form.setFieldsValue({
             ...record,
         });
-        setEditingKey(record.idinscripcion);
+        setEditingKey(record.idfalta);
     };
 
 
-    const isEditing = (record) => record.idinscripcion === editingKey;
+    const isEditing = (record) => record.idfalta === editingKey;
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const confirmDel = (idinscripcion) => {
+    const confirmDel = (idfalta) => {
         message.success('Procesando');
-        deleteInscripcion(idinscripcion);
+        deleteFalta(idfalta);
     };
 
-    const save = async (idinscripcion) => {
+    const save = async (idfalta) => {
 /*
 
         try {
             const row = await form.validateFields();
             const newData = [...data];
-            const index = newData.findIndex((item) => idinscripcion === item.idinscripcion);
+            const index = newData.findIndex((item) => idfalta === item.idfalta);
 
             if (index > -1) {
 
@@ -341,7 +299,7 @@ const ListaInscripcion = ({ token }) => {
 
                 newData[index].fecha_upd = strFecha;
                 //console.log(newData);
-                updateInscripcion(newData[index]);
+                updateFalta(newData[index]);
                 setData(newData);
                 setEditingKey('');
 
@@ -376,19 +334,15 @@ const ListaInscripcion = ({ token }) => {
 
     return (
         <>
-            <h3>Lista estudiantes</h3>
+            <h3>Faltas</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
-            <Button type='primary' style={{ backgroundColor: `#E94Informatica5`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
-            
-            <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idinscripcion'} />
+            <Button type='primary' style={{ backgroundColor: `#E94325`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
+            <div style={{ marginBottom: `5px`, textAlign: `end` }}>
+
+                <Button type="primary" onClick={() => navigate('/crearfalta')} >{<PlusOutlined />} Nuevo</Button>
+            </div>
+            <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idfalta'} />
         </>
     )
 }
-export default ListaInscripcion
-
-/*
-<div style={{ marginBottom: `5px`, textAlign: `end` }}>
-
-                <Button type="primary" onClick={() => navigate('/crearinscripcion')} >{<PlusOutlined />} Nuevo</Button>
-            </div>
-*/
+export default ListaFalta
