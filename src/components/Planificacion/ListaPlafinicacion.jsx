@@ -1,11 +1,16 @@
-import axios from 'axios';
-import { useState, useEffect, useRef } from 'react'
-import { Logout } from '../Utils/Logout';
+//import axios from 'axios'
+import {
+    useState,
+    //useEffect, 
+    useRef
+} from 'react'
+//import { Logout } from '../Utils/Logout';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import { Popconfirm, Typography } from 'antd';
 import { Form } from 'antd';
-import TableModel from '../TableModel/TableModel';
-import { Tag } from 'antd';
+//import TableModel from '../TableModel/TableModel';
+import TableModelExpand from '../TableModel/TableModelExpand';
+//import { Tag } from 'antd';
 import { message } from 'antd';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
@@ -13,15 +18,27 @@ import Highlighter from 'react-highlight-words';
 import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
-const URI = 'http://186.158.152.141:3002/automot/api/cliente/';
-let fechaActual = new Date();
-const ListaClientes = ({ token }) => {
+const data = [
+    { idplan: 1, curso: 'Especializacion', turno: 'Tarde', detalle: [
+        { idplan:1,iddetalle: 1, materia: 'Matematica', carga_horaria: '100', finicio: '01-01-2023', ffin: `25-06-2023`, instructor: `Cap. Claudio Ibarra` },
+        { idplan:1,iddetalle: 2, materia: 'Ciencias', carga_horaria: '120', finicio: '26-06-2023', ffin: `10-10-2023`, instructor: `Cap. Alexis Aguirre` },
+    ] },
+    { idplan: 2, curso: 'Maestria', turno: 'Mañana', detalle: [
+        { idplan:2,iddetalle: 1, materia: 'Matematica', carga_horaria: '100', finicio: '01-01-2023', ffin: `25-06-2023`, instructor: `Cap. Claudio Ibarra` },
+        { idplan:2,iddetalle: 2, materia: 'Ciencias', carga_horaria: '120', finicio: '26-06-2023', ffin: `10-10-2023`, instructor: `Cap. Alexis Aguirre` },
+    ] },
+]
 
+
+//const URI = 'http://186.158.152.141:3002/automot/api/plan/';
+//let fechaActual = new Date();
+const ListaPlan = ({ token }) => {
+    console.log(data)
     const [form] = Form.useForm();
-    const [data, setData] = useState([]);
+    //const [data, setData] = useState([]);
 
     const [editingKey, setEditingKey] = useState('');
-    const strFecha = fechaActual.getFullYear() + "-" + (fechaActual.getMonth() + 1) + "-" + fechaActual.getDate();
+    //const strFecha = fechaActual.getFullYear() + "-" + (fechaActual.getMonth() + 1) + "-" + fechaActual.getDate();
     //---------------------------------------------------
     //Datos de buscador
     const [searchText, setSearchText] = useState('');
@@ -29,8 +46,9 @@ const ListaClientes = ({ token }) => {
     const searchInput = useRef(null);
     const navigate = useNavigate();
     //---------------------------------------------------
+    /*
     useEffect(() => {
-        getCliente();
+        getPlan();
         // eslint-disable-next-line
     }, []);
 
@@ -41,14 +59,25 @@ const ListaClientes = ({ token }) => {
         }
     };
 
-    const getCliente = async () => {
+    const getPlan = async () => {
         const res = await axios.get(`${URI}/get`, config)
-        /*En caso de que de error en el server direcciona a login*/
+        /*En caso de que de error en el server direcciona a login* /
         if (res.data.error) {
             Logout();
         }
+        /*
+        const resDataId = [];
+
+        res.data.body.map((rs) => {
+            rs.key = rs.idplan;
+            resDataId.push(rs);
+            return true;
+        })
+        setData(resDataId);
+        * /
         setData(res.data.body);
     }
+    */
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -145,126 +174,66 @@ const ListaClientes = ({ token }) => {
     });
 
 
-    const deleteProducto = async (id) => {
-        await axios.put(`${URI}/inactiva/${id}`, {}, config);
-        getCliente();
-    }
 
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Clientes');
-        XLSX.writeFile(wb, 'Clientes.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'Plans');
+        XLSX.writeFile(wb, 'Plans.xlsx')
     }
 
-    const updateCliente = async (newData) => {
+    const deletePlan = async (id) => {
+        //await axios.delete(`${URI}/del/${id}`, config)
+        //getPlan();
+    }
+    // eslint-disable-next-line
+    const updatePlan = async (newData) => {
         //console.log('Entra en update');
         //console.log(newData)
-        await axios.put(URI + "put/" + newData.idcliente, newData, config
-        );
-        getCliente();
-    }
 
+        /*
+        await axios.put(URI + "put/" + newData.idplan, newData, config
+        );
+        getPlan();*/
+    }
 
     const columns = [
         {
-            title: 'id',
-            dataIndex: 'idcliente',
-            width: '5%',
+            title: 'idplan',
+            dataIndex: 'idplan',
+            width: '6%',
             editable: false,
+            ...getColumnSearchProps('id'),
         },
         {
-            title: 'Cliente',
-            dataIndex: 'razon_social',
-            //width: '22%',
+            title: 'Curso',
+            dataIndex: 'curso',
+            width: '22%',
             editable: true,
-            ...getColumnSearchProps('razon_social'),
+            ...getColumnSearchProps('curso'),
         },
         {
-            title: 'Ruc',
-            dataIndex: 'ruc',
-            //width: '22%',
+            title: 'Turno',
+            dataIndex: 'turno',
+            width: '22%',
             editable: true,
-            ...getColumnSearchProps('ruc'),
+            ...getColumnSearchProps('turno'),
         },
-        {
-            title: 'Telefono',
-            dataIndex: 'telefono',
-            //width: '5%',
-            editable: true,
-        },
-        {
-            title: 'Correo',
-            dataIndex: 'correo',
-            //width: '12%',
-            editable: true,
-        },
-        {
-            title: 'Direccion',
-            dataIndex: 'direccion',
-            //width: '10%',
-            editable: true,
-        },
-        {
-            title: 'Ciudad',
-            dataIndex: 'idciudad',
-            //  width: '15%',
-            editable: true,
-            render: (_, { ciudad }) => {
-                return (
-                    ciudad.descripcion
-                );
-            },
-        },
-        {
-            title: 'Tipo',
-            dataIndex: 'tipo_cli',
-              width: '9%',
-            editable: true,
-            render: (_, { tipo_cli }) => {
-                if(tipo_cli){
-                    return (
-                        tipo_cli === 'F' ? 'Fisico' : 'Juridico'
-                );
-                }else{
-                    return (
-                        null
-                );
-                }
-            },
-        },
-        {
-            title: 'Sexo',
-            dataIndex: 'sexo',
-              width: '9%',
-            editable: true,
-            render: (_, { sexo }) => {
-                if(sexo){
-                    return (
-                        sexo === 'MA' ? 'Masculino' : 'Femenino'
-                );
-                }else{
-                    return (
-                        null
-                );
-                }
-            },
-        },
-        {
-            title: 'Estado',
-            dataIndex: 'estado',
-            width: '7%',
-            editable: true,
-            render: (_, { estado, idcliente }) => {
-                let color = 'black';
-                if (estado.toUpperCase() === 'AC') { color = 'green' }
-                else { color = 'volcano'; }
-                return (
-                    <Tag color={color} key={idcliente} >
-                        {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
-                    </Tag>
-                );
-            },
-        },
+        /* {
+             title: 'Estado',
+             dataIndex: 'estado',
+             //width: '7%',
+             editable: true,
+             render: (_, { estado, idplan }) => {
+                 let color = 'black';
+                 if (estado.toUpperCase() === 'AC') { color = 'green' }
+                 else { color = 'volcano'; }
+                 return (
+                     <Tag color={color} key={idplan} >
+                         {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
+                     </Tag>
+                 );
+             },
+         },*/
         {
             title: 'Accion',
             dataIndex: 'operacion',
@@ -275,7 +244,7 @@ const ListaClientes = ({ token }) => {
                 return editable ? (
                     <span>
                         <Typography.Link
-                            onClick={() => save(record.idcliente, record)}
+                            onClick={() => save(record.idplan)}
                             style={{
                                 marginRight: 8,
                             }} >
@@ -288,12 +257,14 @@ const ListaClientes = ({ token }) => {
                     </span>
                 ) : (
                     <>
+
                         <Typography.Link style={{ margin: `5px` }} disabled={editingKey !== ''} onClick={() => edit(record)}>
                             Editar
                         </Typography.Link>
+
                         <Popconfirm
                             title="Desea eliminar este registro?"
-                            onConfirm={() => confirmDel(record.idcliente)}
+                            onConfirm={() => confirmDel(record.idplan)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No" >
@@ -301,70 +272,127 @@ const ListaClientes = ({ token }) => {
                                 Borrar
                             </Typography.Link>
                         </Popconfirm>
+
                     </>
                 );
             },
         }
     ];
 
+    //{iddetalle:11,materia:'Matematica',carga_horaria:'100',finicio:'01-01-2023',ffin:`25-06-2023`,instructor:`Cap. Claudio Ibarra`},
+
+    const columnDet = [
+        {
+            title: 'iddetalle',
+            dataIndex: 'iddetalle',
+            key: 'iddetalle',
+            width: '2%',
+        },
+        {
+            title: 'Materia',
+            dataIndex: 'materia',
+            width: '2%',
+        },
+        {
+            title: 'Carga horaria',
+            dataIndex: 'carga_horaria',
+            width: '2%',
+            /*
+            render: (det_modelo) => {
+                //console.log(det_modelo)
+                return det_modelo.costo
+            }
+            */
+        },
+        {
+            title: 'Fecha inicio',
+            dataIndex: 'finicio',
+            width: '2%',
+        },
+        {
+            title: 'Fecha fin',
+            dataIndex: 'ffin',
+            width: '2%',
+        },
+        {
+            title: 'Instructor',
+            dataIndex: 'instructor',
+            key: 'instructor',
+            width: '2%',
+            /*
+            render: (_, { estado, idinventario }) => {
+                let color = 'black';
+                if (estado.toUpperCase() === 'AC') { color = 'blue' }
+                else { color = 'volcano'; }
+                return (
+                    <Tag color={color} key={idinventario} >
+                        {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
+                    </Tag>
+                );
+            },
+            */
+        },
+        {
+            title: 'Action',
+            dataIndex: 'operation',
+            key: 'operation',
+            width: '5%',
+            render: () => (
+                null
+            ),
+        },
+    ];
+
     const edit = (record) => {
         form.setFieldsValue({
             ...record,
         });
-        setEditingKey(record.idcliente);
+        setEditingKey(record.idplan);
     };
 
 
-    const isEditing = (record) => record.idcliente === editingKey;
+    const isEditing = (record) => record.idplan === editingKey;
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const confirmDel = (idcliente) => {
+    const confirmDel = (idplan) => {
         message.success('Procesando');
-        //deleteCliente(idcliente);
-        deleteProducto(idcliente)
+        deletePlan(idplan);
     };
 
-    const save = async (idcliente, record) => {
-        //console.log('record:  ',record.img.length);
-        //console.log(idcliente);
-        try {
-            const row = await form.validateFields();
-            const newData = [...data];
-            const index = newData.findIndex((item) => idcliente === item.idcliente);
-
-            if (index > -1) {
-                const item = newData[index];
-                //console.log(newData);
-
-                newData.splice(index, 1, {
-                    ...item,
-                    ...row,
-                });
-
-                if (record.idcliente === item.idcliente) {
-                    //console.log('Entra en asignacion',record.img);
-                    newData[index].img = record.img;
-                }
-
-                newData[index].fecha_upd = strFecha;
-
-                //console.log(newData);
-
-                updateCliente(newData[index]);
-                setData(newData);
-                setEditingKey('');
-                message.success('Registro actualizado');
-            } else {
-                newData.push(row);
-                setData(newData);
-                setEditingKey('');
-            }
-        } catch (errInfo) {
-            console.log('Validate Failed:', errInfo);
-        }
+    const save = async (idplan) => {
+        /*
+        
+                try {
+                    const row = await form.validateFields();
+                    const newData = [...data];
+                    const index = newData.findIndex((item) => idplan === item.idplan);
+        
+                    if (index > -1) {
+        
+                        const item = newData[index];
+                        newData.splice(index, 1, {
+                            ...item,
+                            ...row,
+                        });
+        
+                        newData[index].fecha_upd = strFecha;
+                        //console.log(newData);
+                        updatePlan(newData[index]);
+                        setData(newData);
+                        setEditingKey('');
+        
+                        message.success('Registro actualizado');
+                    } else {
+                        newData.push(row);
+                        setData(newData);
+                        setEditingKey('');
+                    }
+                } catch (errInfo) {
+                    console.log('Validate Failed:', errInfo);
+                }*/
     };
 
 
@@ -387,14 +415,17 @@ const ListaClientes = ({ token }) => {
 
     return (
         <>
-            <h3>Clientes</h3>
+            <h3>Planificacion</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
-            <Button type='primary' style={{ backgroundColor: `#E94325`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
+            <Button type='primary' style={{ backgroundColor: `#E94Informatica5`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>
-                <Button type="primary" onClick={() => navigate('/crearcliente')} >{<PlusOutlined />} Nuevo</Button>
+
+                <Button type="primary" onClick={() => navigate('/crearplan')} >{<PlusOutlined />} Nuevo</Button>
             </div>
-            <TableModel token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idcliente'} />
+            <TableModelExpand columnDet={columnDet} keyDet={'iddetalle'} token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idplan'} />
         </>
     )
 }
-export default ListaClientes;
+export default ListaPlan;
+
+//<TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idplan'} />

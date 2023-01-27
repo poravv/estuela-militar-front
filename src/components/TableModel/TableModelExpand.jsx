@@ -1,13 +1,15 @@
-import axios from 'axios'
-import { useState, useEffect } from 'react'
+//import axios from 'axios'
+import { useState
+//  , useEffect 
+} from 'react'
 import { Form, Input, InputNumber, Table, Select } from 'antd';
 import { Spin } from 'antd';
-import Buscador from '../Buscador/Buscador';
+//import Buscador from '../Buscador/Buscador';
 import UploadFile from '../Utils/Upload';
 import { Buffer } from 'buffer'
 
 const { Option } = Select;
-const URI = 'http://186.158.152.141:3002/automot/api/proveedor/';
+//const URI = 'http://186.158.152.141:3002/automot/api/proveedor/';
 
 function TableModelExpand({ token, form, data, mergedColumns, keyExtraido,columnDet,keyDet }) {
 
@@ -16,8 +18,9 @@ function TableModelExpand({ token, form, data, mergedColumns, keyExtraido,column
     //console.log('edit',record);
 
     const [previewImage, setPreviewImage] = useState('');
-    const [proveedores, setProveedores] = useState([]);
+    //const [proveedores, setProveedores] = useState([]);
 
+   /*
     useEffect(() => {
       getProveedor();
       // eslint-disable-next-line
@@ -29,11 +32,12 @@ function TableModelExpand({ token, form, data, mergedColumns, keyExtraido,column
         "Authorization": `Bearer ${token}`,
       }
     };
-
     const getProveedor = async () => {
       const res = await axios.get(`${URI}/get`, config);
       setProveedores(res.data.body);
     }
+   */
+
 
     const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
 
@@ -50,6 +54,7 @@ function TableModelExpand({ token, form, data, mergedColumns, keyExtraido,column
             }
           </td>);
       //break;
+      /*
       case 'idproveedor':
         return (
           <td {...restProps}>
@@ -59,6 +64,7 @@ function TableModelExpand({ token, form, data, mergedColumns, keyExtraido,column
                 : (children)
             }
           </td>);
+      */
       case 'img':
         //console.log(dataIndex);
         return (
@@ -116,8 +122,8 @@ function TableModelExpand({ token, form, data, mergedColumns, keyExtraido,column
             dataSource={data}
             columns={mergedColumns}
             expandedRowRender = {(record) => (
-                //console.log('det: -',record)
-                expandedRowRender(record.receta??record.det_inventarios??record.det_venta)
+                //console.log('det: -',record.detalle)
+                expandedRowRender(record.detalle??record.receta??record.det_inventarios??record.det_venta)
             )}
             rowClassName="editable-row"
             scroll={{

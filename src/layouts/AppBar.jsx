@@ -50,7 +50,7 @@ const AppBar = ({ usuario }) => {
             getItem(() => navegacion('/turno'), 'Turno', '5'),
         ]),
         getItem(null, 'Academico', 'sub3', <FolderOpenOutlined />, [
-            getItem(() => navegacion('/curso'), 'Planificacion', '6'),
+            getItem(() => navegacion('/plan'), 'Planificacion', '6'),
             getItem(() => navegacion('/convocatoria'), 'Convocatoria', '7'),//Agregar aqui la asistencia, faltas y evaluaciones
             getItem(() => navegacion('/inscripcion'), 'Inscripcion', '8'),
         ]),
