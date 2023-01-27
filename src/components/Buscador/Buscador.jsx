@@ -17,6 +17,7 @@ function Buscador({ data, label, value,dataIndex,title, onChange, onSearch }) {
                 filterOption={(input, option) =>
                     (option?.razon_social ??
                         option?.descripcion??
+                        option.documento??
                         option?.nombre ?? '').toLowerCase().includes(input.toLowerCase())
                 }
                 fieldNames={{

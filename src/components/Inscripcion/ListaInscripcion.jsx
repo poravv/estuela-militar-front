@@ -9,10 +9,10 @@ import { Form } from 'antd';
 import TableModel from '../TableModel/TableModel';
 //import { Tag } from 'antd';
 import { message } from 'antd';
-import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
 import Highlighter from 'react-highlight-words';
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
 const data = [
@@ -50,7 +50,7 @@ const ListaInscripcion = ({ token }) => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
-    const navigate = useNavigate();
+   // const navigate = useNavigate();
     //---------------------------------------------------
     /*
     useEffect(() => {
@@ -388,12 +388,16 @@ const ListaInscripcion = ({ token }) => {
             <h3>Inscripcion</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
             <Button type='primary' style={{ backgroundColor: `#E94Informatica5`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
-            <div style={{ marginBottom: `5px`, textAlign: `end` }}>
-
-                <Button type="primary" onClick={() => navigate('/crearinscripcion')} >{<PlusOutlined />} Nuevo</Button>
-            </div>
+            
             <TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idinscripcion'} />
         </>
     )
 }
 export default ListaInscripcion
+
+/*
+<div style={{ marginBottom: `5px`, textAlign: `end` }}>
+
+                <Button type="primary" onClick={() => navigate('/crearinscripcion')} >{<PlusOutlined />} Nuevo</Button>
+            </div>
+*/

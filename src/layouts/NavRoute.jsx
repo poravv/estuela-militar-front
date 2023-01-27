@@ -20,6 +20,8 @@ import ListaTurno from '../components/Turno/ListaTurno';
 import NuevoTurno from '../components/Turno/NuevoTurno';
 import ListaPlan from '../components/Planificacion/ListaPlafinicacion';
 import NuevoPlan from '../components/Planificacion/NuevaPlanificacion';
+import ListaConvocatoria from '../components/Convocatoria/ListaConvocatoria';
+import NuevoConvocatoria from '../components/Convocatoria/NuevaConvocatoria';
 
 function NavRoute({ usuario }) {
   return (
@@ -54,11 +56,15 @@ function NavRoute({ usuario }) {
             }
             
             #Inscripcion
-            <Route path='/inscripcion' element={<ListaInscripcion token={usuario.token} />} />
-            <Route path='/crearinscripcion' element={<NuevoInscripcion token={usuario.token} />} />
+            <Route path='/inscripcion/:idconvocatoria' element={<ListaInscripcion token={usuario.token} />} />
+            <Route path='/crearinscripcion/:idconvocatoria' element={<NuevoInscripcion token={usuario.token} />} />
             #Planificacion
             <Route path='/plan' element={<ListaPlan token={usuario.token} />} />
             <Route path='/crearplan' element={<NuevoPlan token={usuario.token} />} />
+
+            #Convocatoria
+            <Route path='/convocatoria' element={<ListaConvocatoria token={usuario.token} />} />
+            <Route path='/crearconvocatoria' element={<NuevoConvocatoria token={usuario.token} />} />
             
             <Route path='*' element={<Navigate replace to='/' />} />
             #Venta

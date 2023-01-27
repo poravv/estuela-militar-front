@@ -31,11 +31,7 @@ const lstcurso = [
     { idcurso: 3, descripcion: 'Tercero', estado: 'AC' },
 ]
 
-const lstturno = [
-    { idturno: 1, descripcion: 'Mañana', estado: 'AC' },
-    { idturno: 2, descripcion: 'Tarde', estado: 'AC' },
-    { idturno: 3, descripcion: 'Noche', estado: 'AC' },
-]
+
 let fechaActual = new Date();
 
 function NuevoPlan({ token, idusuario, idsucursal }) {
@@ -259,15 +255,11 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
                     initialValues={{ remember: true, }}
                     onFinish={gestionGuardado}
                     autoComplete="off">
-
                     <Row style={{ justifyContent: `center`, margin: `10px` }}>
                         <Col style={{ marginLeft: `15px` }}>
                             <Buscador label={'descripcion'} title={'Curso'} value={'idcurso'} data={lstcurso} onChange={onChangedetmodelo} onSearch={onSearch} />
                         </Col>
-                        <Col style={{ marginLeft: `15px` }}>
-                            <Buscador label={'descripcion'} title={'Turno'} value={'idturno'} data={lstturno} onChange={onChangedetmodelo} onSearch={onSearch} />
-                        </Col>
-
+                        
                     </Row>
                     <Row style={{ justifyContent: `center`, margin: `10px` }}>
                         <Col style={{ marginLeft: `15px` }}>
@@ -285,7 +277,6 @@ function NuevoPlan({ token, idusuario, idsucursal }) {
                         </Col>
                         <Col>
                         </Col>
-
                         <Col style={{ marginLeft: `15px` }}>
                             <Button type="primary" htmlType="submit" onClick={(e) => agregarLista(e)} >
                                 Agregar

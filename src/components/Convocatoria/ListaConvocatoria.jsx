@@ -3,7 +3,7 @@ import {
     useState,
     //useEffect, 
     useRef
-} from 'react'
+} from 'react';
 //import { Logout } from '../Utils/Logout';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import { Popconfirm, Typography } from 'antd';
@@ -19,20 +19,20 @@ import { useNavigate } from "react-router-dom";
 import { RiFileExcel2Line, RiFilePdfFill } from "react-icons/ri";
 
 const data = [
-    { idplan: 1, curso: 'Ing Informatica', detalle: [
-        { idplan:1,iddetalle: 1, materia: 'Matematica', carga_horaria: '100', finicio: '01-01-2023', ffin: `25-06-2023`, instructor: `Cap. Claudio Ibarra` },
-        { idplan:1,iddetalle: 2, materia: 'Ciencias', carga_horaria: '120', finicio: '26-06-2023', ffin: `10-10-2023`, instructor: `Cap. Alexis Aguirre` },
+    { idconvocatoria: 1, plan: 'Ing Informatica', turno: 'Tarde', detalle: [
+        { idconvocatoria:1,iddetalle: 1, materia: 'Matematica', carga_horaria: '100', finicio: '01-01-2023', ffin: `25-06-2023`, instructor: `Cap. Claudio Ibarra` },
+        { idconvocatoria:1,iddetalle: 2, materia: 'Ciencias', carga_horaria: '120', finicio: '26-06-2023', ffin: `10-10-2023`, instructor: `Cap. Alexis Aguirre` },
     ] },
-    { idplan: 2, curso: 'Analisis de Sistemas', detalle: [
-        { idplan:2,iddetalle: 1, materia: 'Matematica', carga_horaria: '100', finicio: '01-01-2023', ffin: `25-06-2023`, instructor: `Cap. Claudio Ibarra` },
-        { idplan:2,iddetalle: 2, materia: 'Ciencias', carga_horaria: '120', finicio: '26-06-2023', ffin: `10-10-2023`, instructor: `Cap. Alexis Aguirre` },
+    { idconvocatoria: 2, plan: 'Maestria en Comunicación', turno: 'Mañana', detalle: [
+        { idconvocatoria:2,iddetalle: 1, materia: 'Matematica', carga_horaria: '100', finicio: '01-01-2023', ffin: `25-06-2023`, instructor: `Cap. Claudio Ibarra` },
+        { idconvocatoria:2,iddetalle: 2, materia: 'Ciencias', carga_horaria: '120', finicio: '26-06-2023', ffin: `10-10-2023`, instructor: `Cap. Alexis Aguirre` },
     ] },
 ]
 
 
-//const URI = 'http://186.158.152.141:3002/automot/api/plan/';
+//const URI = 'http://186.158.152.141:3002/automot/api/convocatoria/';
 //let fechaActual = new Date();
-const ListaPlan = ({ token }) => {
+const ListaConvocatoria = ({ token }) => {
     console.log(data)
     const [form] = Form.useForm();
     //const [data, setData] = useState([]);
@@ -48,7 +48,7 @@ const ListaPlan = ({ token }) => {
     //---------------------------------------------------
     /*
     useEffect(() => {
-        getPlan();
+        getConvocatoria();
         // eslint-disable-next-line
     }, []);
 
@@ -59,7 +59,7 @@ const ListaPlan = ({ token }) => {
         }
     };
 
-    const getPlan = async () => {
+    const getConvocatoria = async () => {
         const res = await axios.get(`${URI}/get`, config)
         /*En caso de que de error en el server direcciona a login* /
         if (res.data.error) {
@@ -69,7 +69,7 @@ const ListaPlan = ({ token }) => {
         const resDataId = [];
 
         res.data.body.map((rs) => {
-            rs.key = rs.idplan;
+            rs.key = rs.idconvocatoria;
             resDataId.push(rs);
             return true;
         })
@@ -177,56 +177,75 @@ const ListaPlan = ({ token }) => {
 
     const handleExport = () => {
         var wb = XLSX.utils.book_new(), ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, 'Plans');
-        XLSX.writeFile(wb, 'Plans.xlsx')
+        XLSX.utils.book_append_sheet(wb, ws, 'Convocatorias');
+        XLSX.writeFile(wb, 'Convocatorias.xlsx')
     }
 
-    const deletePlan = async (id) => {
+    const deleteConvocatoria = async (id) => {
         //await axios.delete(`${URI}/del/${id}`, config)
-        //getPlan();
+        //getConvocatoria();
     }
     // eslint-disable-next-line
-    const updatePlan = async (newData) => {
+    const updateConvocatoria = async (newData) => {
         //console.log('Entra en update');
         //console.log(newData)
 
         /*
-        await axios.put(URI + "put/" + newData.idplan, newData, config
+        await axios.put(URI + "put/" + newData.idconvocatoria, newData, config
         );
-        getPlan();*/
+        getConvocatoria();*/
     }
 
     const columns = [
         {
-            title: 'idplan',
-            dataIndex: 'idplan',
+            title: 'id',
+            dataIndex: 'idconvocatoria',
             width: '6%',
             editable: false,
-            ...getColumnSearchProps('id'),
+            ...getColumnSearchProps('idconvocatoria'),
         },
         {
-            title: 'Curso',
-            dataIndex: 'curso',
+            title: 'Plan',
+            dataIndex: 'plan',
             width: '22%',
             editable: true,
-            ...getColumnSearchProps('curso'),
+            ...getColumnSearchProps('plan'),
+        },
+        {
+            title: 'Turno',
+            dataIndex: 'turno',
+            width: '22%',
+            editable: true,
+            ...getColumnSearchProps('turno'),
         },
         /* {
              title: 'Estado',
              dataIndex: 'estado',
              //width: '7%',
              editable: true,
-             render: (_, { estado, idplan }) => {
+             render: (_, { estado, idconvocatoria }) => {
                  let color = 'black';
                  if (estado.toUpperCase() === 'AC') { color = 'green' }
                  else { color = 'volcano'; }
                  return (
-                     <Tag color={color} key={idplan} >
+                     <Tag color={color} key={idconvocatoria} >
                          {estado.toUpperCase() === 'AC' ? 'Activo' : 'Inactivo'}
                      </Tag>
                  );
              },
          },*/
+        {
+            title: 'Inscribir',
+            dataIndex: 'inscriptcion',
+            render: (_, record) => {
+                return (
+                    <>
+                   <Button  onClick={() => navigate(`/crearinscripcion/${record.idconvocatoria}`)} >Inscribir</Button>
+                   <Button style={{ marginLeft:`10px` }}  onClick={() => navigate(`/inscripcion/${record.idconvocatoria}`)} >Lista</Button> 
+                    </>
+                )
+            },
+        },
         {
             title: 'Accion',
             dataIndex: 'operacion',
@@ -237,7 +256,7 @@ const ListaPlan = ({ token }) => {
                 return editable ? (
                     <span>
                         <Typography.Link
-                            onClick={() => save(record.idplan)}
+                            onClick={() => save(record.idconvocatoria)}
                             style={{
                                 marginRight: 8,
                             }} >
@@ -257,7 +276,7 @@ const ListaPlan = ({ token }) => {
 
                         <Popconfirm
                             title="Desea eliminar este registro?"
-                            onConfirm={() => confirmDel(record.idplan)}
+                            onConfirm={() => confirmDel(record.idconvocatoria)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No" >
@@ -340,28 +359,28 @@ const ListaPlan = ({ token }) => {
         form.setFieldsValue({
             ...record,
         });
-        setEditingKey(record.idplan);
+        setEditingKey(record.idconvocatoria);
     };
 
 
-    const isEditing = (record) => record.idplan === editingKey;
+    const isEditing = (record) => record.idconvocatoria === editingKey;
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const confirmDel = (idplan) => {
+    const confirmDel = (idconvocatoria) => {
         message.success('Procesando');
-        deletePlan(idplan);
+        deleteConvocatoria(idconvocatoria);
     };
 
-    const save = async (idplan) => {
+    const save = async (idconvocatoria) => {
         /*
         
                 try {
                     const row = await form.validateFields();
                     const newData = [...data];
-                    const index = newData.findIndex((item) => idplan === item.idplan);
+                    const index = newData.findIndex((item) => idconvocatoria === item.idconvocatoria);
         
                     if (index > -1) {
         
@@ -373,7 +392,7 @@ const ListaPlan = ({ token }) => {
         
                         newData[index].fecha_upd = strFecha;
                         //console.log(newData);
-                        updatePlan(newData[index]);
+                        updateConvocatoria(newData[index]);
                         setData(newData);
                         setEditingKey('');
         
@@ -408,17 +427,17 @@ const ListaPlan = ({ token }) => {
 
     return (
         <>
-            <h3>Planificacion</h3>
+            <h3>Convocatoria</h3>
             <Button type='primary' style={{ backgroundColor: `#08AF17`, margin: `2px` }}  ><RiFileExcel2Line onClick={handleExport} size={20} /></Button>
             <Button type='primary' style={{ backgroundColor: `#E94Informatica5`, margin: `2px` }}  ><RiFilePdfFill size={20} /></Button>
             <div style={{ marginBottom: `5px`, textAlign: `end` }}>
 
-                <Button type="primary" onClick={() => navigate('/crearplan')} >{<PlusOutlined />} Nuevo</Button>
+                <Button type="primary" onClick={() => navigate('/crearconvocatoria')} >{<PlusOutlined />} Nuevo</Button>
             </div>
-            <TableModelExpand columnDet={columnDet} keyDet={'iddetalle'} token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idplan'} />
+            <TableModelExpand columnDet={columnDet} keyDet={'iddetalle'} token={token} mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idconvocatoria'} />
         </>
     )
 }
-export default ListaPlan;
+export default ListaConvocatoria;
 
-//<TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idplan'} />
+//<TableModel mergedColumns={mergedColumns} data={data} form={form} keyExtraido={'idconvocatoria'} />
